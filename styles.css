@@ -1,0 +1,114 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #ffffff;
+  width: 360px;
+  padding: 20px;
+  margin: 0;
+  box-sizing: border-box;
+  color: #333;
+}
+.container {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.logo {
+  display: block;
+  margin: 0 auto 30px;
+  max-width: 100%;
+  height: auto;
+}
+.input-group {
+  margin-bottom: 30px;
+}
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #444;
+}
+input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+input[type="text"]:focus {
+  border-color: #333;
+  outline: none;
+}
+button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+button:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+}
+#status {
+  margin-top: 10px;
+  color: #28a745;
+  text-align: center;
+}
+#ingredient-list {
+  margin-top: 30px;
+}
+#ingredient-list h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+}
+#search-bar {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+#search-bar:focus {
+  border-color: #333;
+  outline: none;
+}
+#ingredient-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#ingredient-items li {
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+#ingredient-items li:hover {
+  background-color: #f9f9f9;
+  transform: translateY(-2px);
+}
+.hidden {
+  display: none;
+}
