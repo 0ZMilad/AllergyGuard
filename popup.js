@@ -27,3 +27,24 @@ function displayIngredients(ingredients) {
 
   ingredientList.classList.remove("hidden");
 }
+
+// Event listener for the search bar to filter ingredients
+document.getElementById("search-bar").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const items = document.querySelectorAll("#ingredient-items li");
+
+  items.forEach((item) => {
+    if (item.textContent.toLowerCase().includes(query)) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+});
+
+// Load saved ingredients from storage and display them
+chrome.storage.sync.get("badIngredients", function (data) {
+  if (data.badIngredients && data.badIngredients.length > 0) {
+    displayIngredients(data.badIngredients);
+  }
+});
