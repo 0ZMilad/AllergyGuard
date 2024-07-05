@@ -13,3 +13,14 @@ console.log("Content script loaded.");
 // This outlines the planned approach for identifying and alerting users about harmful ingredients in their shopping cart items.
 
 // Additonally in the future an ingredient API could be used to provide more detailed information about the harmful ingredients and nofitfy users of the items in the cart with harmful ingredients.
+
+const url = window.location.href;
+
+// Send url to background.js to send to server
+
+chrome.runtime.sendMessage(
+  { message: "send_url", url: url },
+  function (response) {
+    console.log(response.message);
+  }
+);
