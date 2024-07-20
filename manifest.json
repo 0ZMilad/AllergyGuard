@@ -4,7 +4,12 @@
   "version": "1.0",
   "description": "Flags foods in your cart with user-specified bad ingredients on Instacart and Amazon Fresh.",
   "permissions": ["activeTab", "storage", "scripting"],
-  "host_permissions": ["*://*.instacart.com/*", "*://*.amazon.com/*"],
+  "host_permissions": [
+    "*://*.instacart.com/*",
+    "*://*.amazon.com/*",
+    "*://*.amazon.co.uk/*",
+    "http://localhost:3000/"
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -23,8 +28,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.instacart.com/*", "*://*.amazon.com/*"],
+      "matches": [
+        "*://*.instacart.com/*",
+        "*://*.amazon.com/*",
+        "*://*.amazon.co.uk/*"
+      ],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:3000;"
+  }
 }
