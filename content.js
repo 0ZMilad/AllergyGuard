@@ -4,6 +4,7 @@ console.log("Content script loaded.");
 // Upcoming functionality: Scrape ingredients from webpage and identify harmful ones
 
 // Steps to implement:
+// pre-requisite: Define a list of harmful ingredients and extension should send URL to server
 // 1. Scrape item ingredients from the webpage using scrape logic code in server. (Completed main logic however need post request to send the website url to the server (Amazon, Amazon Fresh) and express get request to get data from the server)
 // 2. Cross-reference each item's ingredients against a predefined list of harmful ingredients.
 // 3. If a match is found, flag the ingredient as harmful.
@@ -14,13 +15,15 @@ console.log("Content script loaded.");
 
 // Additonally in the future an ingredient API could be used to provide more detailed information about the harmful ingredients and nofitfy users of the items in the cart with harmful ingredients.
 
+// Get the current page URL
 const url = window.location.href;
+console.log("Current URL:", url);
 
-// Send url to background.js to send to server
-
+// Send a message to the background script to log the current URL
 chrome.runtime.sendMessage(
-  { message: "send_url", url: url },
+  { message: "log_url", url: url },
   function (response) {
-    console.log(response.message);
+    // Log the response from the background script
+    console.log("Received response from background script:", response);
   }
 );
