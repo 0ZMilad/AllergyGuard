@@ -7,6 +7,16 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "send_url") {
+    console.log("Received URL from content script;", request);
+
+    // Handle 'log_url' message
+    if (request.message === "log_url") {
+      // Log the URL received from the content script
+      console.log("URL from content script:", request.url);
+      // Send a response back to the content script
+      sendResponse({ message: "URL logged successfully" });
+    }
+
     // Post request to server
     fetch("http://localhost:3000/scrape", {
       method: "POST",
