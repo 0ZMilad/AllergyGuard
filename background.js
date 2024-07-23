@@ -46,9 +46,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         });
       })
       .catch((err) => {
-        console.log(err);
+        // Log any errors that occur
+        console.error("Error:", err);
+        // Send an error response back to the content script
+        sendResponse({
+          message: "Error sending URL to server.",
+          error: err.message,
+        });
       });
 
+    // Return true to indicate that the response will be sent asynchronously
     return true;
   }
 });
