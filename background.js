@@ -6,18 +6,21 @@ chrome.runtime.onInstalled.addListener(() => {
 // Message received from content script  - add listener to listen for message from content script
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log("Received URL from content script;", request);
+
+  // Handle 'log_url' message
+  if (request.message === "log_url") {
+    // Log the URL received from the content script
+    console.log("URL from content script:", request.url);
+    // Send a response back to the content script
+    sendResponse({ message: "URL logged successfully" });
+  }
+
+  // Handle 'send_url' message
   if (request.message === "send_url") {
-    console.log("Received URL from content script;", request);
+    console.log("Sending URL to server:", request.url);
 
-    // Handle 'log_url' message
-    if (request.message === "log_url") {
-      // Log the URL received from the content script
-      console.log("URL from content script:", request.url);
-      // Send a response back to the content script
-      sendResponse({ message: "URL logged successfully" });
-    }
-
-    // Post request to server
+    // Send a POST request to the server with the URL
     fetch("http://localhost:3000/scrape", {
       method: "POST",
       headers: {
@@ -25,10 +28,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       },
       body: JSON.stringify({ url: request.url }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        // Check if the response is ok (status in the range 200-299)
+        if (!res.ok) {
+          throw new Error("Server responded with status: " + res.status);
+        }
+        // Parse the JSON response
+        return res.json();
+      })
       .then((data) => {
-        console.log(data);
-        sendResponse({ message: "URL sent to server." });
+        // Log the server's response
+        console.log("Server response:", data);
+        // Send a success response back to the content script
+        sendResponse({
+          message: "URL sent to server successfully.",
+          data: data,
+        });
       })
       .catch((err) => {
         console.log(err);

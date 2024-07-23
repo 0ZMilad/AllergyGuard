@@ -27,3 +27,12 @@ chrome.runtime.sendMessage(
     console.log("Received response from background script:", response);
   }
 );
+
+// Send a message to the background script to forward the URL to the server for scraping
+chrome.runtime.sendMessage(
+  { message: "send_url", url: url },
+  function (response) {
+    // Log the response from the server
+    console.log("Received response from server:", response);
+  }
+);
