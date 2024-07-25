@@ -7,9 +7,23 @@ document
       .getElementById("allergy-input")
       .value.split(",")
       .map((item) => item.trim());
-    chrome.storage.sync.set({ badIngredients: badIngredients }, function () {
-      document.getElementById("status").textContent = "Saved!";
-      displayIngredients(badIngredients);
+
+    // Retrieve exisiting bad ingredients from storage
+    chrome.storage.sync.get("badIngredients", function (data) {
+      let existingIngredients = data.badIngredients || [];
+
+      existingIngredients.push(...badIngredients);
+
+      // remove duplicates
+      const uniqueIngredients = [...new Set(existingIngredients)];
+
+      chrome.storage.sync.set(
+        { badIngredients: uniqueIngredients },
+        function () {
+          document.getElementById("status").textContent = "Saved!";
+          displayIngredients(uniqueIngredients);
+        }
+      );
     });
   });
 
