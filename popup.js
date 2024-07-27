@@ -39,6 +39,7 @@ function displayIngredients(ingredients) {
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "X";
+    removeButton.classList.add("remove-button"); // Add a class to style the button
 
     // Add a click event listener to the button to handle removal
     removeButton.addEventListener("click", function () {
