@@ -36,6 +36,35 @@ function displayIngredients(ingredients) {
   ingredients.forEach((ingredient) => {
     const li = document.createElement("li");
     li.textContent = ingredient;
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "X";
+
+    // Add a click event listener to the button to handle removal
+    removeButton.addEventListener("click", function () {
+      // Remove ingredient from DOM
+      li.remove();
+
+      // Retrieve the current list of bad ingredients from Chrome storage
+      chrome.storage.sync.get("badIngredients", function (data) {
+        // Filter out the ingredient that was removed
+        const updatedIngredients = data.badIngredients.filter(
+          (item) => item !== ingredient
+        );
+        // Save the updated list of ingredients back to Chrome storage
+        chrome.storage.sync.set(
+          { badIngredients: updatedIngredients },
+          function () {
+            // Redisplay the updated list of ingredients
+            displayIngredients(updatedIngredients);
+          }
+        );
+      });
+    });
+
+    // Append the remove button to the list item
+    li.appendChild(removeButton);
+    // Append the list item to the ingredient items container
     ingredientItems.appendChild(li);
   });
 
