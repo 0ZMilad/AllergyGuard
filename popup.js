@@ -6,7 +6,8 @@ document
     const badIngredients = document
       .getElementById("allergy-input")
       .value.split(",")
-      .map((item) => item.trim());
+      .map((item) => item.trim())
+      .filter((item) => item !== "");
 
     // Retrieve exisiting bad ingredients from storage
     chrome.storage.sync.get("badIngredients", function (data) {
@@ -25,6 +26,13 @@ document
         }
       );
     });
+
+    // alert if user tries to add empty ingredient
+    if (badIngredients.length === 0) {
+      document.getElementById("status").textContent =
+        "Please enter an ingredient!";
+      return;
+    }
   });
 
 // Function to display the list of flagged ingredients
