@@ -9,6 +9,13 @@ document
       .map((item) => item.trim())
       .filter((item) => item !== "");
 
+    // alert if user tries to add empty ingredient
+    if (badIngredients.length === 0) {
+      document.getElementById("status").textContent =
+        "Please enter an ingredient!";
+      return;
+    }
+
     // Retrieve exisiting bad ingredients from storage
     chrome.storage.sync.get("badIngredients", function (data) {
       let existingIngredients = data.badIngredients || [];
@@ -26,13 +33,6 @@ document
         }
       );
     });
-
-    // alert if user tries to add empty ingredient
-    if (badIngredients.length === 0) {
-      document.getElementById("status").textContent =
-        "Please enter an ingredient!";
-      return;
-    }
   });
 
 // Function to display the list of flagged ingredients
