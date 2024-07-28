@@ -49,27 +49,7 @@ function displayIngredients(ingredients) {
     removeButton.textContent = "X";
     removeButton.classList.add("remove-button"); // Add a class to style the button
 
-    // Add a click event listener to the button to handle removal
-    removeButton.addEventListener("click", function () {
-      // Remove ingredient from DOM
-      li.remove();
-
-      // Retrieve the current list of bad ingredients from Chrome storage
-      chrome.storage.sync.get("badIngredients", function (data) {
-        // Filter out the ingredient that was removed
-        const updatedIngredients = data.badIngredients.filter(
-          (item) => item !== ingredient
-        );
-        // Save the updated list of ingredients back to Chrome storage
-        chrome.storage.sync.set(
-          { badIngredients: updatedIngredients },
-          function () {
-            // Redisplay the updated list of ingredients
-            displayIngredients(updatedIngredients);
-          }
-        );
-      });
-    });
+    removeIngredient(removeButton, ingredient, li);
 
     // Append the remove button to the list item
     li.appendChild(removeButton);
@@ -100,3 +80,28 @@ chrome.storage.sync.get("badIngredients", function (data) {
     displayIngredients(data.badIngredients);
   }
 });
+
+// Function to remove ingredient from list which takes in the remove button, ingredient, and list item
+const removeIngredient = (removeButton, ingredient, li) => {
+  // Add a click event listener to the button to handle removal
+  removeButton.addEventListener("click", function () {
+    // Remove ingredient from DOM
+    li.remove();
+
+    // Retrieve the current list of bad ingredients from Chrome storage
+    chrome.storage.sync.get("badIngredients", function (data) {
+      // Filter out the ingredient that was removed
+      const updatedIngredients = data.badIngredients.filter(
+        (item) => item !== ingredient
+      );
+      // Save the updated list of ingredients back to Chrome storage
+      chrome.storage.sync.set(
+        { badIngredients: updatedIngredients },
+        function () {
+          // Redisplay the updated list of ingredients
+          displayIngredients(updatedIngredients);
+        }
+      );
+    });
+  });
+};
