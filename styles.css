@@ -1,21 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
+:root {
+  --primary-color: #000;
+  --secondary-color: #333;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --border-color: #e0e0e0;
+  --success-color: #28a745;
+  --focus-color: #4d90fe;
+  --hover-color: #f8f8f8;
+  --remove-button-hover: #ff4d4d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: "Roboto", sans-serif;
-  background-color: #f0f0f0;
+  background-color: var(--background-color);
+  color: var(--text-color);
   width: 270px;
   padding: 15px;
-  margin: 0;
-  box-sizing: border-box;
-  color: #333;
 }
 
 .container {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   padding: 22.5px;
   border-radius: 11.25px;
-  box-shadow: 0 7.5px 15px rgba(0, 0, 0, 0.1);
-  border: none; /* Remove the border */
+  box-shadow: 0 7.5px 15px rgba(255, 255, 255, 0.05);
 }
 
 .logo {
@@ -33,48 +48,50 @@ label {
   display: block;
   margin-bottom: 7.5px;
   font-weight: 500;
-  color: #222;
+  color: var(--secondary-color);
 }
 
-input[type="text"] {
+input[type="text"],
+#search-bar {
   width: 100%;
   padding: 11.25px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   margin-bottom: 7.5px;
-  box-sizing: border-box;
   background-color: #fff;
-  color: #000;
+  color: var(--primary-color);
   font-size: 12px;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-input[type="text"]:focus {
-  border-color: #000;
+input[type="text"]:focus,
+#search-bar:focus {
+  border-color: var(--primary-color);
   outline: none;
+  box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
 }
 
 button {
   display: block;
   width: 100%;
   padding: 11.25px;
-  background-color: #000;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #333;
+  background-color: var(--secondary-color);
   transform: translateY(-2px);
 }
 
 #status {
   margin-top: 7.5px;
-  color: #28a745;
+  color: var(--success-color);
   text-align: center;
 }
 
@@ -85,37 +102,22 @@ button:hover {
 #ingredient-list h2 {
   font-size: 15px;
   margin-bottom: 15px;
-  color: #000;
+  color: var(--primary-color);
   text-align: center;
 }
 
 #search-bar {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
   margin-bottom: 16px;
-  background-color: #fff;
-  color: #333;
   font-size: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-#search-bar:focus {
-  outline: none;
-  border-color: #4d90fe;
-  box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 #search-bar::placeholder {
-  color: #999;
+  color: #bbb;
 }
 
 #ingredient-items {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 #ingredient-items li {
@@ -124,25 +126,24 @@ button:hover {
   align-items: center;
   padding: 10px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   margin-bottom: 8px;
-  color: #333;
   font-size: 14px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 #ingredient-items li:hover {
-  background-color: #f5f5f5;
+  background-color: var(--hover-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .remove-button {
   background-color: #fff;
-  color: #333;
-  border: 1px solid #ddd;
+  color: var(--secondary-color);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   width: 24px;
   height: 24px;
@@ -155,9 +156,9 @@ button:hover {
 }
 
 .remove-button:hover {
-  background-color: #ff4d4d;
+  background-color: var(--remove-button-hover);
   color: #fff;
-  border-color: #ff4d4d;
+  border-color: var(--remove-button-hover);
 }
 
 .hidden {
