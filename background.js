@@ -37,11 +37,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         return res.json();
       })
       .then((data) => {
-        // Log the server's response
-        console.log("Server response:", data);
-        // Send a success response back to the content script
+        // Send a response back to the content script
         sendResponse({
-          message: "URL sent to server successfully.",
+          message: "URL sent to server successfully",
           data: data,
         });
       })

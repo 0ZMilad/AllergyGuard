@@ -34,5 +34,12 @@ chrome.runtime.sendMessage(
   function (response) {
     // Log the response from the server
     console.log("Received response from server:", response);
+    if (response.data) {
+      // If scraped data is received, log it to the console
+      console.log("Scraped data:", response.data);
+    } else if (response.error) {
+      // If an error occurs, log the error message
+      console.error("Error:", response.error);
+    }
   }
 );
