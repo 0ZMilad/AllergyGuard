@@ -30,13 +30,17 @@ chrome.runtime.sendMessage(
 
 // Send a message to the background script to forward the URL to the server for scraping
 chrome.runtime.sendMessage(
-  { message: "send_url", url: url },
+  { message: "url_scrape", url: url },
   function (response) {
-    // Log the response from the server
-    console.log("Received response from server:", response);
     if (response.data) {
       // If scraped data is received, log it to the console
-      console.log("Scraped data:", response.data);
+      console.log(
+        "Scraped data: Item Name",
+        response.data.itemName,
+        "\n",
+        "Scraped data: ingredients",
+        response.data.ingredientsList
+      );
     } else if (response.error) {
       // If an error occurs, log the error message
       console.error("Error:", response.error);
