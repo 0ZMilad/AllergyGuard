@@ -105,3 +105,23 @@ const removeIngredient = (removeButton, ingredient, li) => {
     });
   });
 };
+
+// Function to handle the scraped data
+function handleScrapedData(data) {
+  alert(
+    "Scraped data: Item Name - " +
+      data.itemName +
+      "\n" +
+      "Scraped data: Ingredients - " +
+      data.ingredientsList
+  );
+}
+
+// retrieve data from local storage
+chrome.storage.local.get("data", function (data) {
+  const scrapedData = data.data;
+
+  if (scrapedData) {
+    handleScrapedData(scrapedData);
+  }
+});
