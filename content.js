@@ -34,16 +34,27 @@ chrome.runtime.sendMessage(
   function (response) {
     if (response.data) {
       // If scraped data is received, log it to the console
-      console.log(
-        "Scraped data: Item Name",
-        response.data.itemName,
-        "\n",
-        "Scraped data: ingredients",
-        response.data.ingredientsList
-      );
+      handleScrapedData(response.data);
     } else if (response.error) {
       // If an error occurs, log the error message
       console.error("Error:", response.error);
     }
   }
 );
+
+// Function to handle the scraped data
+function handleScrapedData(data) {
+  const scrapedItemName = data.itemName || "Unknown Item";
+  const scrapedIngredients = data.ingredientsList || [];
+
+  console.log("Scraped Item Name:", scrapedItemName);
+  console.log("Scraped Ingredients:", scrapedIngredients);
+
+  // Retrieve the bad ingredients from Chrome storage
+  chrome.storage.sync.get("badIngredients", function (result) {
+    let existingIngredients = result.badIngredients || [];
+    let matchedBadIngredients = new Set();
+
+    console.log("Existing Bad Ingredients:", existingIngredients);
+  });
+}

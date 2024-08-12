@@ -42,11 +42,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           message: "Parsed JSON data received from server.",
           data: data,
         });
-
-        // store the data in local storage
-        chrome.storage.local.set({ data: data }, function () {
-          console.log("Data is set to local storage");
-        });
       })
       .catch((err) => {
         // Log any errors that occur
