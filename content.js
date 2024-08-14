@@ -42,7 +42,7 @@ chrome.runtime.sendMessage(
   }
 );
 
-// Function to handle the scraped data
+// Function to handle the scraped data - alert user of bad ingredients
 function handleScrapedData(data) {
   const scrapedItemName = data.itemName || "Unknown Item";
   const scrapedIngredients = data.ingredientsList || [];
@@ -56,5 +56,25 @@ function handleScrapedData(data) {
     let matchedBadIngredients = new Set();
 
     console.log("Existing Bad Ingredients:", existingIngredients);
+
+    // Create a single regex pattern for all bad ingredients
+    const badIngredientsPattern = existingIngredients
+      .map(escapeRegExp)
+      .join("|");
+    const regex = new RegExp(`\\b(${badIngredientsPattern})\\b`, "gi");
+
+    // Check all ingredients at once
+    scrapedIngredients.forEach((ingredient) => {
+      const matches = ingredient.match(regex);
+      if (matches) {
+        matches.forEach((match) =>
+          matchedBadIngredients.add(match.toLowerCase())
+        );
+      }
+    });
+
+    console.log("Matched Bad Ingredients:", [...matchedBadIngredients]);
+
+    // Call display results function
   });
 }
