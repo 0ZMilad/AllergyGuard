@@ -75,11 +75,37 @@ function handleScrapedData(data) {
 
     console.log("Matched Bad Ingredients:", [...matchedBadIngredients]);
 
-    // Call display results function
+    displayResults(scrapedItemName, matchedBadIngredients);
   });
 }
 
 // Function to escape special characters in regex
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Function to display results to the user
+function displayResults(itemName, matchedIngredients) {
+  const badIngredientsArray = [...matchedIngredients];
+
+  if (badIngredientsArray.length > 0) {
+    const message = `Warning: The product "${itemName}" contains the following concerning ingredients:\n\n${badIngredientsArray.join(
+      ", "
+    )}`;
+
+    // Create a styled dialog instead of using alert
+    const dialog = document.createElement("div");
+    dialog.innerHTML = `
+      <div style="position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;">
+        <div style="background-color:white;padding:20px;border-radius:5px;max-width:80%;">
+          <h2 style="color:red;">Ingredient Alert</h2>
+          <p>${message.replace(/\n/g, "<br>")}</p>
+          <button onclick="this.parentElement.parentElement.remove()">Close</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+  } else {
+    console.log(`No concerning ingredients found in "${itemName}".`);
+  }
 }
