@@ -10,7 +10,7 @@ function createDialog(message) {
   title.classList.add("dialog-title");
 
   const messageParagraph = document.createElement("p");
-  messageParagraph.innerHTML = message.replace(/\n/g, "<br>");
+  messageParagraph.textContent = message.replace(/\n/g, " ");
   messageParagraph.classList.add("dialog-message");
 
   const closeButton = document.createElement("button");
