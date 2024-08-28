@@ -111,9 +111,9 @@ async function pagination() {
 
   let currentPage = 1;
 
-  let totalPages = Math.ceil(
-    (await chrome.storage.sync.get("badIngredients")) / itemPerPage
-  );
+  const data = await chrome.storage.sync.get("badIngredients").badIngredients;
+
+  let totalPages = Math.ceil(data.length / itemPerPage);
 
   const nextPage = document.createElement("button");
   nextPage.textContent = "→";
