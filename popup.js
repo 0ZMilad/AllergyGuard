@@ -127,6 +127,19 @@ async function pagination() {
   document.body.appendChild(previousPage);
   document.body.appendChild(pageInfo);
 
+  function updatePage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const currentPageItems = badIngredients.slice(startIndex, endIndex);
+
+    displayIngredients(currentPageItems);
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    previousPage.disabled = currentPage === 1;
+    nextPage.disabled = currentPage === totalPages;
+  }
+
   nextPage.addEventListener("click", function () {
     if (currentPage < totalPages) {
       currentPage++;
