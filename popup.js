@@ -143,12 +143,18 @@ async function pagination() {
   nextPage.addEventListener("click", function () {
     if (currentPage < totalPages) {
       currentPage++;
+      updatePage();
     }
   });
 
   previousPage.addEventListener("click", function () {
     if (currentPage > 1) {
       currentPage--;
+      updatePage();
     }
   });
+
+  updatePage();
 }
+
+pagination();
