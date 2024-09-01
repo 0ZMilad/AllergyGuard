@@ -119,9 +119,14 @@ async function pagination() {
 
   const nextPage = document.createElement("button");
   nextPage.textContent = "→";
+  nextPage.id = "next-button";
+
   const previousPage = document.createElement("button");
   previousPage.textContent = "←";
+  previousPage.id = "prev-button";
+
   const pageInfo = document.createElement("span");
+  pageInfo.id = "page-info";
 
   document.body.appendChild(nextPage);
   document.body.appendChild(previousPage);
