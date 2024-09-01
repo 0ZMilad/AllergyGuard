@@ -107,21 +107,25 @@ const removeIngredient = (removeButton, ingredient, li) => {
 };
 
 async function pagination() {
-  const itemPerPage = 3;
+  const itemsPerPage = 3;
 
   let currentPage = 1;
 
-  const data = await chrome.storage.sync.get("badIngredients").badIngredients;
+  const data = await chrome.storage.sync.get("badIngredients");
 
-  let totalPages = Math.ceil(data.length / itemPerPage);
+  const badIngredients = data.badIngredients || [];
+
+  let totalPages = Math.ceil(badIngredients.length / itemsPerPage);
 
   const nextPage = document.createElement("button");
   nextPage.textContent = "→";
   const previousPage = document.createElement("button");
   previousPage.textContent = "←";
+  const pageInfo = document.createElement("span");
 
   document.body.appendChild(nextPage);
   document.body.appendChild(previousPage);
+  document.body.appendChild(pageInfo);
 
   nextPage.addEventListener("click", function () {
     if (currentPage < totalPages) {
