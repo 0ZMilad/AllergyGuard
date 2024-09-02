@@ -30,7 +30,9 @@ body {
   background-color: #ffffff;
   padding: 22.5px;
   border-radius: 11.25px;
-  box-shadow: 0 7.5px 15px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 7.5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  padding-bottom: 40px; /* Make room for page info */
 }
 
 .logo {
@@ -57,7 +59,6 @@ input[type="text"],
   padding: 11.25px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  margin-bottom: 7.5px;
   background-color: #fff;
   color: var(--primary-color);
   font-size: 12px;
@@ -168,38 +169,47 @@ button:hover {
 /* Next and Previous Page Buttons */
 #next-button,
 #prev-button {
-  background-color: var(--primary-color);
+  background: linear-gradient(145deg, #000, #333);
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
-  width: 40px;
-  height: 40px;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease;
-  margin: 0 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  margin: 0 4px;
+  top: -33px;
+  left: 10px;
 }
 
-#next-button:hover,
-#prev-button:hover {
-  background-color: var(--secondary-color);
+#prev-button:hover,
+#next-button:hover {
+  background: linear-gradient(145deg, #333, #000);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-#next-button:focus,
-#prev-button:focus {
+#prev-button:focus,
+#next-button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
 }
 
 /* Page Info Span */
 #page-info {
-  font-size: 14px;
-  color: var(--text-color);
-  font-weight: 500;
-  margin: 0 10px;
+  position: absolute;
+  bottom: 55px;
+  left: 0;
+  right: 0;
+  font-size: 11px;
+  color: var(--secondary-color);
+  font-weight: 400;
+  text-align: center;
 }

@@ -128,8 +128,8 @@ async function pagination() {
   const pageInfo = document.createElement("span");
   pageInfo.id = "page-info";
 
-  document.body.appendChild(nextPage);
   document.body.appendChild(previousPage);
+  document.body.appendChild(nextPage);
   document.body.appendChild(pageInfo);
 
   function updatePage() {
