@@ -117,20 +117,28 @@ async function pagination() {
 
   let totalPages = Math.ceil(badIngredients.length / itemsPerPage);
 
-  const nextPage = document.createElement("button");
-  nextPage.textContent = "→";
-  nextPage.id = "next-button";
+  let previousPage = document.getElementById("prev-button");
+  if (!previousPage) {
+    previousPage = document.createElement("button");
+    previousPage.textContent = "←";
+    previousPage.id = "prev-button";
+    document.body.appendChild(previousPage);
+  }
 
-  const previousPage = document.createElement("button");
-  previousPage.textContent = "←";
-  previousPage.id = "prev-button";
+  let nextPage = document.getElementById("next-button");
+  if (!nextPage) {
+    nextPage = document.createElement("button");
+    nextPage.textContent = "→";
+    nextPage.id = "next-button";
+    document.body.appendChild(nextPage);
+  }
 
-  const pageInfo = document.createElement("span");
-  pageInfo.id = "page-info";
-
-  document.body.appendChild(previousPage);
-  document.body.appendChild(nextPage);
-  document.body.appendChild(pageInfo);
+  let pageInfo = document.getElementById("page-info");
+  if (!pageInfo) {
+    pageInfo = document.createElement("span");
+    pageInfo.id = "page-info";
+    document.body.appendChild(pageInfo);
+  }
 
   function updatePage() {
     const startIndex = (currentPage - 1) * itemsPerPage;
