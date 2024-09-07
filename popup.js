@@ -98,8 +98,8 @@ const removeIngredient = (removeButton, ingredient, li) => {
       chrome.storage.sync.set(
         { badIngredients: updatedIngredients },
         function () {
-          // Redisplay the updated list of ingredients
-          displayIngredients(updatedIngredients);
+          // Reinitialise pagination with the updated list of ingredients
+          pagination();
         }
       );
     });
