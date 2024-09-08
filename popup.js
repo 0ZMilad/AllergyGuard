@@ -30,6 +30,7 @@ document
         function () {
           document.getElementById("status").textContent = "Saved!";
           displayIngredients(uniqueIngredients);
+          pagination();
         }
       );
     });
