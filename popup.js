@@ -116,7 +116,12 @@ async function pagination() {
 
   const badIngredients = data.badIngredients || [];
 
-  let totalPages = Math.ceil(badIngredients.length / itemsPerPage);
+  let totalPages;
+  if (badIngredients.length === 0) {
+    totalPages = 1;
+  } else {
+    totalPages = Math.ceil(badIngredients.length / itemsPerPage);
+  }
 
   let previousPage = document.getElementById("prev-button");
   if (!previousPage) {
@@ -148,6 +153,12 @@ async function pagination() {
     const currentPageItems = badIngredients.slice(startIndex, endIndex);
 
     displayIngredients(currentPageItems);
+
+    if (badIngredients.length === 0) {
+      totalPages = 1;
+      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      nextPage.disabled = currentPage === totalPages;
+    }
     pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
     previousPage.disabled = currentPage === 1;
