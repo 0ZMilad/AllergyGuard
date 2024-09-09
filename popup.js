@@ -64,14 +64,18 @@ function displayIngredients(ingredients) {
 // Event listener for the search bar to filter ingredients
 document.getElementById("search-bar").addEventListener("input", function () {
   const query = this.value.toLowerCase();
-  const items = document.querySelectorAll("#ingredient-items li");
 
-  items.forEach((item) => {
-    if (item.textContent.toLowerCase().includes(query)) {
-      item.style.display = "block";
-    } else {
-      item.style.display = "none";
-    }
+  // Retrieve all ingredients from storage
+  chrome.storage.sync.get("badIngredients", function (data) {
+    const allIngredients = data.badIngredients || [];
+
+    // Filter ingredients based on the search query
+    const filteredIngredients = allIngredients.filter((ingredient) =>
+      ingredient.toLowerCase().includes(query)
+    );
+
+    // Display the filtered ingredients
+    displayIngredients(filteredIngredients);
   });
 });
 
