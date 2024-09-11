@@ -69,13 +69,18 @@ document.getElementById("search-bar").addEventListener("input", function () {
   chrome.storage.sync.get("badIngredients", function (data) {
     const allIngredients = data.badIngredients || [];
 
-    // Filter ingredients based on the search query
-    const filteredIngredients = allIngredients.filter((ingredient) =>
-      ingredient.toLowerCase().includes(query)
-    );
+    if (query === "") {
+      // If the search query is empty, reinitialise pagination
+      pagination();
+    } else {
+      // Filter ingredients based on the search query
+      const filteredIngredients = allIngredients.filter((ingredient) =>
+        ingredient.toLowerCase().includes(query)
+      );
 
-    // Display the filtered ingredients
-    displayIngredients(filteredIngredients);
+      // Display the filtered ingredients
+      displayIngredients(filteredIngredients);
+    }
   });
 });
 
