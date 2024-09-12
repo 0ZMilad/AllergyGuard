@@ -24,6 +24,7 @@ body {
   color: var(--text-color);
   width: 270px;
   padding: 15px;
+  height: 250px;
 }
 
 .container {
