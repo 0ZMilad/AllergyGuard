@@ -30,6 +30,7 @@ document
         function () {
           document.getElementById("status").textContent = "Saved!";
           displayIngredients(uniqueIngredients);
+          pagination();
         }
       );
     });
@@ -63,13 +64,22 @@ function displayIngredients(ingredients) {
 // Event listener for the search bar to filter ingredients
 document.getElementById("search-bar").addEventListener("input", function () {
   const query = this.value.toLowerCase();
-  const items = document.querySelectorAll("#ingredient-items li");
 
-  items.forEach((item) => {
-    if (item.textContent.toLowerCase().includes(query)) {
-      item.style.display = "block";
+  // Retrieve all ingredients from storage
+  chrome.storage.sync.get("badIngredients", function (data) {
+    const allIngredients = data.badIngredients || [];
+
+    if (query === "") {
+      // If the search query is empty, reinitialise pagination
+      pagination();
     } else {
-      item.style.display = "none";
+      // Filter ingredients based on the search query
+      const filteredIngredients = allIngredients.filter((ingredient) =>
+        ingredient.toLowerCase().includes(query)
+      );
+
+      // Display the filtered ingredients
+      displayIngredients(filteredIngredients);
     }
   });
 });
@@ -98,8 +108,8 @@ const removeIngredient = (removeButton, ingredient, li) => {
       chrome.storage.sync.set(
         { badIngredients: updatedIngredients },
         function () {
-          // Redisplay the updated list of ingredients
-          displayIngredients(updatedIngredients);
+          // Reinitialise pagination with the updated list of ingredients
+          pagination();
         }
       );
     });
@@ -115,22 +125,35 @@ async function pagination() {
 
   const badIngredients = data.badIngredients || [];
 
-  let totalPages = Math.ceil(badIngredients.length / itemsPerPage);
+  let totalPages;
+  if (badIngredients.length === 0) {
+    totalPages = 1;
+  } else {
+    totalPages = Math.ceil(badIngredients.length / itemsPerPage);
+  }
 
-  const nextPage = document.createElement("button");
-  nextPage.textContent = "→";
-  nextPage.id = "next-button";
+  let previousPage = document.getElementById("prev-button");
+  if (!previousPage) {
+    previousPage = document.createElement("button");
+    previousPage.textContent = "←";
+    previousPage.id = "prev-button";
+    document.body.appendChild(previousPage);
+  }
 
-  const previousPage = document.createElement("button");
-  previousPage.textContent = "←";
-  previousPage.id = "prev-button";
+  let nextPage = document.getElementById("next-button");
+  if (!nextPage) {
+    nextPage = document.createElement("button");
+    nextPage.textContent = "→";
+    nextPage.id = "next-button";
+    document.body.appendChild(nextPage);
+  }
 
-  const pageInfo = document.createElement("span");
-  pageInfo.id = "page-info";
-
-  document.body.appendChild(previousPage);
-  document.body.appendChild(nextPage);
-  document.body.appendChild(pageInfo);
+  let pageInfo = document.getElementById("page-info");
+  if (!pageInfo) {
+    pageInfo = document.createElement("span");
+    pageInfo.id = "page-info";
+    document.body.appendChild(pageInfo);
+  }
 
   function updatePage() {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -139,6 +162,12 @@ async function pagination() {
     const currentPageItems = badIngredients.slice(startIndex, endIndex);
 
     displayIngredients(currentPageItems);
+
+    if (badIngredients.length === 0) {
+      totalPages = 1;
+      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      nextPage.disabled = currentPage === totalPages;
+    }
     pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
     previousPage.disabled = currentPage === 1;
