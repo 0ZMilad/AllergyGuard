@@ -10,6 +10,10 @@
   --focus-color: #4d90fe;
   --hover-color: #f8f8f8;
   --remove-button-hover: #ff4d4d;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 7.5px 15px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 
 * {
@@ -23,17 +27,17 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   width: 270px;
-  padding: 15px;
   height: 250px;
+  padding: 15px;
 }
 
 .container {
   background-color: #ffffff;
-  padding: 22.5px;
+  padding: 22.5px 22.5px 40px;
   border-radius: 11.25px;
-  box-shadow: 0 7.5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   position: relative;
-  padding-bottom: 40px; /* Make room for page info */
+  overflow: visible;
 }
 
 .logo {
@@ -63,7 +67,7 @@ input[type="text"],
   background-color: #fff;
   color: var(--primary-color);
   font-size: 12px;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 input[type="text"]:focus,
@@ -83,7 +87,7 @@ button {
   border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 button:hover {
@@ -111,7 +115,7 @@ button:hover {
 #search-bar {
   margin-bottom: 16px;
   font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow-sm);
 }
 
 #search-bar::placeholder {
@@ -125,22 +129,21 @@ button:hover {
 #ingredient-items li {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 10px 40px 10px 10px;
   background-color: #fff;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   margin-bottom: 8px;
   font-size: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
   position: relative;
-  padding-right: 40px;
 }
 
 #ingredient-items li:hover {
   background-color: var(--hover-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 .remove-button {
@@ -159,7 +162,7 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .remove-button:hover {
@@ -176,7 +179,6 @@ button:hover {
   display: none;
 }
 
-/* Next and Previous Page Buttons */
 #next-button,
 #prev-button {
   background: linear-gradient(145deg, #000, #333);
@@ -191,7 +193,7 @@ button:hover {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0 4px;
@@ -219,12 +221,6 @@ button:hover {
   cursor: not-allowed;
 }
 
-/* Ensure buttons are always clickable */
-.container {
-  overflow: visible;
-}
-
-/* Page Info Span */
 #page-info {
   position: absolute;
   bottom: 55px;
