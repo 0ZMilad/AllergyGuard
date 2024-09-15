@@ -21,7 +21,15 @@ function createDialog(message) {
     dialog.remove();
   });
 
-  // Assemble the dialog
+  // Close the dialog when clicking outside the dialog-box (on the overlay)
+  dialog.addEventListener("click", (event) => {
+    // If the click target is the overlay itself (not the contentBox), close the dialog
+    if (event.target === dialog) {
+      dialog.remove();
+    }
+  });
+
+  // Assemble the dialog components
   contentBox.appendChild(title);
   contentBox.appendChild(messageParagraph);
   contentBox.appendChild(closeButton);
