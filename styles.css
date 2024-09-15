@@ -24,7 +24,7 @@
 
 body {
   font-family: "Roboto", sans-serif;
-  background-color: var(--background-color);
+  background-color: rgba(255, 255, 255, 0.5);
   color: var(--text-color);
   width: 270px;
   height: 250px;
@@ -35,9 +35,11 @@ body {
   background-color: #ffffff;
   padding: 22.5px 22.5px 40px;
   border-radius: 11.25px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: visible;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: -12px;
 }
 
 .logo {
@@ -197,7 +199,7 @@ button:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0 4px;
-  top: -33px;
+  top: -28px;
   left: 10px;
   z-index: 10;
 }
@@ -223,7 +225,7 @@ button:hover {
 
 #page-info {
   position: absolute;
-  bottom: 39px;
+  bottom: 34px;
   left: 0;
   right: 0;
   font-size: 11px;
