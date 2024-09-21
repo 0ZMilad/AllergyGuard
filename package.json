@@ -1,0 +1,12 @@
+{
+  "name": "allergyguard",
+  "version": "1.0.0",
+  "description": "AllergyGuard is a powerful browser extension designed to help users identify and avoid ingredients that are harmful or undesirable based on their personal dietary restrictions or allergies. By scraping ingredient lists from product pages and cross-referencing them with a user-defined list of bad ingredients, AllergyGuard provides real-time alerts and insights, making grocery shopping online safer and more convenient.",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
