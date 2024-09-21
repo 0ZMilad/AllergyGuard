@@ -11,10 +11,10 @@
     "http://localhost:3000/"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup.html",
     "default_icon": {
       "16": "src/assets/icons/icon16.png",
       "48": "src/assets/icons/icon48.png",
@@ -33,7 +33,7 @@
         "*://*.amazon.com/*",
         "*://*.amazon.co.uk/*"
       ],
-      "js": ["src/components/js/alert-dialog.js", "content.js"],
+      "js": ["src/components/js/alert-dialog.js", "src/content.js"],
       "css": ["src/components/css/alert-dialog.css"]
     }
   ],
