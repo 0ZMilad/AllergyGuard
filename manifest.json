@@ -11,7 +11,7 @@
     "http://localhost:3000/"
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "dist/background.bundle.js"
   },
   "action": {
     "default_popup": "src/popup.html",
@@ -33,7 +33,7 @@
         "*://*.amazon.com/*",
         "*://*.amazon.co.uk/*"
       ],
-      "js": ["src/components/js/alert-dialog.js", "src/content.js"],
+      "js": ["src/components/js/alert-dialog.js", "dist/content.bundle.js"],
       "css": ["src/components/css/alert-dialog.css"]
     }
   ],
