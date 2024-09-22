@@ -1,3 +1,6 @@
+import pagination from "./utilityFunctions/pagination";
+import displayIngredients from "./utilityFunctions/displayIngredients";
+
 // Event listener for the form submission to save bad ingredients
 document
   .getElementById("allergy-form")
@@ -36,31 +39,6 @@ document
     });
   });
 
-// Function to display the list of flagged ingredients
-function displayIngredients(ingredients) {
-  const ingredientList = document.getElementById("ingredient-list");
-  const ingredientItems = document.getElementById("ingredient-items");
-  ingredientItems.innerHTML = "";
-
-  ingredients.forEach((ingredient) => {
-    const li = document.createElement("li");
-    li.textContent = ingredient;
-
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "X";
-    removeButton.classList.add("remove-button"); // Add a class to style the button
-
-    removeIngredient(removeButton, ingredient, li);
-
-    // Append the remove button to the list item
-    li.appendChild(removeButton);
-    // Append the list item to the ingredient items container
-    ingredientItems.appendChild(li);
-  });
-
-  ingredientList.classList.remove("hidden");
-}
-
 // Event listener for the search bar to filter ingredients
 document.getElementById("search-bar").addEventListener("input", function () {
   const query = this.value.toLowerCase();
@@ -90,105 +68,5 @@ chrome.storage.sync.get("badIngredients", function (data) {
     displayIngredients(data.badIngredients);
   }
 });
-
-// Function to remove ingredient from list which takes in the remove button, ingredient, and list item
-const removeIngredient = (removeButton, ingredient, li) => {
-  // Add a click event listener to the button to handle removal
-  removeButton.addEventListener("click", function () {
-    // Remove ingredient from DOM
-    li.remove();
-
-    // Retrieve the current list of bad ingredients from Chrome storage
-    chrome.storage.sync.get("badIngredients", function (data) {
-      // Filter out the ingredient that was removed
-      const updatedIngredients = data.badIngredients.filter(
-        (item) => item !== ingredient
-      );
-      // Save the updated list of ingredients back to Chrome storage
-      chrome.storage.sync.set(
-        { badIngredients: updatedIngredients },
-        function () {
-          // Reinitialise pagination with the updated list of ingredients
-          pagination();
-        }
-      );
-    });
-  });
-};
-
-async function pagination() {
-  const itemsPerPage = 3;
-
-  let currentPage = 1;
-
-  const data = await chrome.storage.sync.get("badIngredients");
-
-  const badIngredients = data.badIngredients || [];
-
-  let totalPages;
-  if (badIngredients.length === 0) {
-    totalPages = 1;
-  } else {
-    totalPages = Math.ceil(badIngredients.length / itemsPerPage);
-  }
-
-  let previousPage = document.getElementById("prev-button");
-  if (!previousPage) {
-    previousPage = document.createElement("button");
-    previousPage.textContent = "←";
-    previousPage.id = "prev-button";
-    document.body.appendChild(previousPage);
-  }
-
-  let nextPage = document.getElementById("next-button");
-  if (!nextPage) {
-    nextPage = document.createElement("button");
-    nextPage.textContent = "→";
-    nextPage.id = "next-button";
-    document.body.appendChild(nextPage);
-  }
-
-  let pageInfo = document.getElementById("page-info");
-  if (!pageInfo) {
-    pageInfo = document.createElement("span");
-    pageInfo.id = "page-info";
-    document.body.appendChild(pageInfo);
-  }
-
-  function updatePage() {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    const currentPageItems = badIngredients.slice(startIndex, endIndex);
-
-    displayIngredients(currentPageItems);
-
-    if (badIngredients.length === 0) {
-      totalPages = 1;
-      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-      nextPage.disabled = currentPage === totalPages;
-    }
-    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-
-    previousPage.disabled = currentPage === 1;
-    nextPage.disabled = currentPage === totalPages;
-  }
-
-  nextPage.addEventListener("click", function () {
-    if (currentPage < totalPages) {
-      currentPage++;
-      updatePage();
-    }
-  });
-
-  previousPage.addEventListener("click", function () {
-    if (currentPage > 1) {
-      currentPage--;
-      updatePage();
-    }
-  });
-
-  updatePage();
-}
 
 pagination();
