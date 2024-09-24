@@ -1,0 +1,29 @@
+.input-group {
+  margin-bottom: 22.5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7.5px;
+  font-weight: 500;
+  color: var(--secondary-color);
+}
+
+input[type="text"],
+#search-bar {
+  width: 100%;
+  padding: 11.25px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #fff;
+  color: var(--primary-color);
+  font-size: 12px;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus,
+#search-bar:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+}
