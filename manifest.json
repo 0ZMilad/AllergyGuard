@@ -1,43 +1,46 @@
 {
-  "manifest_version": 3,
-  "name": "AllergyGuard for Groceries",
-  "version": "1.0",
-  "description": "Flags foods in your cart with user-specified bad ingredients on Instacart and Amazon Fresh.",
-  "permissions": ["activeTab", "storage", "scripting"],
-  "host_permissions": [
-    "*://*.instacart.com/*",
-    "*://*.amazon.com/*",
-    "*://*.amazon.co.uk/*",
-    "http://localhost:3000/"
-  ],
-  "background": {
-    "service_worker": "dist/background.bundle.js"
-  },
-  "action": {
-    "default_popup": "src/popup.html",
-    "default_icon": {
-      "16": "src/assets/icons/icon16.png",
-      "48": "src/assets/icons/icon48.png",
-      "128": "src/assets/icons/icon128.png"
-    }
-  },
-  "icons": {
-    "16": "src/assets/icons/icon16.png",
-    "48": "src/assets/icons/icon48.png",
-    "128": "src/assets/icons/icon128.png"
-  },
-  "content_scripts": [
-    {
-      "matches": [
+    "manifest_version": 3,
+    "name": "AllergyGuard for Groceries",
+    "version": "1.0",
+    "description": "Flags foods in your cart with user-specified bad ingredients on Instacart and Amazon Fresh.",
+    "permissions": ["activeTab", "storage", "scripting"],
+    "host_permissions": [
         "*://*.instacart.com/*",
         "*://*.amazon.com/*",
-        "*://*.amazon.co.uk/*"
-      ],
-      "js": ["src/components/js/alert-dialog.js", "dist/content.bundle.js"],
-      "css": ["src/components/css/alert-dialog.css"]
+        "*://*.amazon.co.uk/*",
+        "http://localhost:3000/"
+    ],
+    "background": {
+        "service_worker": "dist/background.bundle.js"
+    },
+    "action": {
+        "default_popup": "src/popup.html",
+        "default_icon": {
+            "16": "src/assets/icons/icon16.png",
+            "48": "src/assets/icons/icon48.png",
+            "128": "src/assets/icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "src/assets/icons/icon16.png",
+        "48": "src/assets/icons/icon48.png",
+        "128": "src/assets/icons/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.instacart.com/*",
+                "*://*.amazon.com/*",
+                "*://*.amazon.co.uk/*"
+            ],
+            "js": [
+                "src/components/js/alert-dialog.js",
+                "dist/content.bundle.js"
+            ],
+            "css": ["src/components/css/alert-dialog.css"]
+        }
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:3000;"
     }
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:3000;"
-  }
 }

@@ -1,79 +1,79 @@
 #status {
-  margin-top: 7.5px;
-  color: var(--success-color);
-  text-align: center;
+    margin-top: 7.5px;
+    color: var(--success-color);
+    text-align: center;
 }
 
 #ingredient-list {
-  margin-top: 22.5px;
+    margin-top: 22.5px;
 }
 
 #ingredient-list h2 {
-  font-size: 15px;
-  margin-bottom: 15px;
-  color: var(--primary-color);
-  text-align: center;
+    font-size: 15px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    text-align: center;
 }
 
 #search-bar {
-  margin-bottom: 16px;
-  font-size: 14px;
-  box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+    font-size: 14px;
+    box-shadow: var(--shadow-sm);
 }
 
 #search-bar::placeholder {
-  color: #bbb;
+    color: #bbb;
 }
 
 #ingredient-items {
-  list-style: none;
+    list-style: none;
 }
 
 #ingredient-items li {
-  display: flex;
-  align-items: center;
-  padding: 10px 40px 10px 10px;
-  background-color: #fff;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  margin-bottom: 8px;
-  font-size: 14px;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-  position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px 40px 10px 10px;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    position: relative;
 }
 
 #ingredient-items li:hover {
-  background-color: var(--hover-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .remove-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #fff;
-  color: var(--secondary-color);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  width: 24px;
-  height: 24px;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: var(--transition);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
 }
 
 .remove-button:hover {
-  background-color: var(--remove-button-hover);
-  color: #fff;
-  border-color: var(--remove-button-hover);
+    background-color: var(--remove-button-hover);
+    color: #fff;
+    border-color: var(--remove-button-hover);
 }
 
 #ingredient-items li:hover .remove-button {
-  transform: translateY(-50%);
+    transform: translateY(-50%);
 }
