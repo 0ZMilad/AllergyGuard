@@ -29,8 +29,3 @@ chrome.runtime.sendMessage(
         }
     }
 );
-
-// Function to escape special characters in regex
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
