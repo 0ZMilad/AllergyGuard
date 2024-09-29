@@ -18,7 +18,7 @@ button:hover {
 
 #next-button,
 #prev-button {
-    background: linear-gradient(145deg, #000, #333);
+    background: #ffffff;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -30,12 +30,14 @@ button:hover {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    transition: var(--transition);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
     position: relative;
     margin: 0 4px;
-    top: -20px;
-    left: 10px;
+    top: -16px;
+    left: 47px;
     z-index: 10;
 }
 
@@ -44,6 +46,10 @@ button:hover {
     background: linear-gradient(145deg, #333, #000);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#next-button {
+    left: 128px;
 }
 
 #prev-button:focus,
