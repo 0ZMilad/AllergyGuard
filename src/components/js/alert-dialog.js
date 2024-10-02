@@ -1,39 +1,89 @@
-function createDialog(message) {
+function createDialog(message, options = {}) {
     const dialog = document.createElement('div');
-    dialog.classList.add('dialog-overlay');
+    dialog.classList.add('notification-box');
 
-    const contentBox = document.createElement('div');
-    contentBox.classList.add('dialog-box');
-
-    const title = document.createElement('h2');
-    title.textContent = 'Ingredient Alert';
-    title.classList.add('dialog-title');
-
-    const messageParagraph = document.createElement('p');
-    messageParagraph.textContent = message.replace(/\n/g, ' ');
-    messageParagraph.classList.add('dialog-message');
-
+    // Close button
     const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.classList.add('dialog-close-button');
+    closeButton.classList.add('notification-close-button');
+    closeButton.innerHTML = '&times;';
+    closeButton.setAttribute('aria-label', 'Close notification');
 
     closeButton.addEventListener('click', () => {
         dialog.remove();
-    });
-
-    // Close the dialog when clicking outside the dialog-box (on the overlay)
-    dialog.addEventListener('click', (event) => {
-        // If the click target is the overlay itself (not the contentBox), close the dialog
-        if (event.target === dialog) {
-            dialog.remove();
+        if (options.onClose) {
+            options.onClose();
         }
     });
 
+    // Optional icon
+    if (options.iconUrl) {
+        const iconWrapper = document.createElement('div');
+        iconWrapper.classList.add('notification-icon');
+
+        const iconImg = document.createElement('img');
+        iconImg.src = options.iconUrl;
+        iconImg.alt = 'Notification Icon';
+
+        iconWrapper.appendChild(iconImg);
+        dialog.appendChild(iconWrapper);
+    }
+
+    // Create the header with colored circles
+    const header = document.createElement('div');
+    header.classList.add('notification-header');
+
+    const circleColors = ['#3b82f6', '#a855f7', '#ec4899']; // Blue, Purple, Pink
+
+    circleColors.forEach((color) => {
+        const circleWrapper = document.createElement('div');
+        circleWrapper.classList.add('circle-wrapper');
+
+        const circle = document.createElement('span');
+        circle.classList.add('circle');
+        circle.style.backgroundColor = color;
+
+        circleWrapper.appendChild(circle);
+        header.appendChild(circleWrapper);
+    });
+
+    // Create the message content
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('notification-content');
+
+    const messageParagraph = document.createElement('p');
+    messageParagraph.textContent = message;
+    messageContent.appendChild(messageParagraph);
+
     // Assemble the dialog components
-    contentBox.appendChild(title);
-    contentBox.appendChild(messageParagraph);
-    contentBox.appendChild(closeButton);
-    dialog.appendChild(contentBox);
+    dialog.appendChild(closeButton);
+    dialog.appendChild(header);
+    dialog.appendChild(messageContent);
+
+    // Auto-dismiss functionality
+    let autoDismissTimeout;
+    if (options.autoDismiss) {
+        autoDismissTimeout = setTimeout(() => {
+            dialog.remove();
+            if (options.onClose) {
+                options.onClose();
+            }
+        }, options.autoDismiss);
+
+        // Pause auto-dismiss on hover
+        dialog.addEventListener('mouseenter', () => {
+            clearTimeout(autoDismissTimeout);
+        });
+
+        dialog.addEventListener('mouseleave', () => {
+            autoDismissTimeout = setTimeout(() => {
+                dialog.remove();
+                if (options.onClose) {
+                    options.onClose();
+                }
+            }, options.autoDismiss);
+        });
+    }
+
     document.body.appendChild(dialog);
 }
 

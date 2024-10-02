@@ -1,5 +1,10 @@
 import displayResults from './displayResults';
 
+// Function to escape special characters in regex
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Function to handle the scraped data - alert user of bad ingredients
 function handleScrapedData(data) {
     const scrapedItemName = data.itemName || 'Unknown Item';
