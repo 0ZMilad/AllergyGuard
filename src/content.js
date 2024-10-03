@@ -23,3 +23,31 @@ function sendUrlToBackgroundScript(url) {
         }
     );
 }
+
+// Handle the click event
+function handleAddToCartClick(event) {
+    const url = window.location.href;
+    console.log('Add to Cart clicked. Current URL:', url);
+    sendUrlToBackgroundScript(url);
+}
+
+// Function to add click event listeners to "Add to Cart" buttons
+function addEventListenersToButtons() {
+    const addToCartButtons = [
+        ...document.querySelectorAll('[id*="add-to-cart"] .a-button-input'),
+        ...document.querySelectorAll('#freshAddToCartButton .a-button-input'),
+        ...document.querySelectorAll(
+            '.a-button-input[name="submit.add-to-cart"]'
+        ),
+        ...document.querySelectorAll('.a-button-input[name="submit.buy-now"]'),
+    ];
+
+    addToCartButtons.forEach((button) => {
+        if (!button.hasAddToCartListener) {
+            button.addEventListener('click', handleAddToCartClick);
+            button.hasAddToCartListener = true;
+        }
+    });
+
+    console.log(`Added event listeners to ${addToCartButtons.length} buttons`);
+}
