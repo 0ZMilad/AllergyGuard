@@ -51,3 +51,19 @@ function addEventListenersToButtons() {
 
     console.log(`Added event listeners to ${addToCartButtons.length} buttons`);
 }
+
+// Initial setup
+function initialise() {
+    addEventListenersToButtons();
+
+    // Use a MutationObserver to handle dynamically added buttons
+    const observer = new MutationObserver(addEventListenersToButtons);
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Wait for the DOM to be fully loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialise);
+} else {
+    initialise();
+}
