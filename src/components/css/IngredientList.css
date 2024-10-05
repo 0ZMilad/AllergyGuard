@@ -6,6 +6,7 @@
 
 #ingredient-list {
     margin-top: 22.5px;
+    height: 190px;
 }
 
 #ingredient-list h2 {
@@ -27,6 +28,7 @@
 
 #ingredient-items {
     list-style: none;
+    height: 100%;
 }
 
 #ingredient-items li {
@@ -41,6 +43,7 @@
     transition: var(--transition);
     box-shadow: var(--shadow-sm);
     position: relative;
+    min-height: 25px;
 }
 
 #ingredient-items li:hover {

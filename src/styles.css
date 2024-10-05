@@ -29,23 +29,24 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: var(--background-color);
+    background-color: #ffffff;
     color: var(--text-color);
     width: 260px;
     height: 240px;
     padding: 8px;
+    border-radius: 12px;
 }
 
 .container {
     background-color: #ffffff;
     padding: 22.5px 22.5px 40px;
-    border-radius: 11.25px;
-    box-shadow: var(--shadow-lg);
+    border-radius: 12px;
+    box-shadow: none;
     position: relative;
     overflow: visible;
-    border: 1px solid var(--border-color);
-    margin-bottom: -22px;
-    margin-top: -3px;
+    border: none;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .logo {
