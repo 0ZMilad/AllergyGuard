@@ -16,12 +16,19 @@ async function pagination() {
         totalPages = Math.ceil(badIngredients.length / itemsPerPage);
     }
 
+    let buttonContainer = document.getElementById('button-container');
+    if (!buttonContainer) {
+        buttonContainer = document.createElement('div');
+        buttonContainer.id = 'button-container';
+        document.body.appendChild(buttonContainer);
+    }
+
     let previousPage = document.getElementById('prev-button');
     if (!previousPage) {
         previousPage = document.createElement('button');
         previousPage.textContent = '←';
         previousPage.id = 'prev-button';
-        document.body.appendChild(previousPage);
+        buttonContainer.appendChild(previousPage);
     }
 
     let nextPage = document.getElementById('next-button');
@@ -29,7 +36,7 @@ async function pagination() {
         nextPage = document.createElement('button');
         nextPage.textContent = '→';
         nextPage.id = 'next-button';
-        document.body.appendChild(nextPage);
+        buttonContainer.appendChild(nextPage);
     }
 
     let pageInfo = document.getElementById('page-info');
