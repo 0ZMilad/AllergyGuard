@@ -16,10 +16,22 @@ button:hover {
     transform: translateY(-2px);
 }
 
+#button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 140px;
+    margin: 20px auto 0;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+}
+
 #next-button,
 #prev-button {
     background: #ffffff;
-    color: #fff;
+    color: #000000;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -34,28 +46,20 @@ button:hover {
         background 0.3s ease,
         transform 0.3s ease,
         box-shadow 0.3s ease;
-    position: relative;
-    margin: 0 4px;
-    top: -16px;
-    left: 47px;
-    z-index: 10;
 }
 
 #prev-button:hover,
 #next-button:hover {
-    background: linear-gradient(145deg, #333, #000);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-#next-button {
-    left: 128px;
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+    color: black;
 }
 
 #prev-button:focus,
 #next-button:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 #prev-button:disabled,
