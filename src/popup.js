@@ -15,15 +15,38 @@ document
         // alert if user tries to add empty ingredient
         if (badIngredients.length === 0) {
             document.getElementById('status').textContent =
-                'Please enter an ingredient!';
+                'Please enter at least one ingredient!';
             return;
         }
 
-        // Retrieve exisiting bad ingredients from storage
+        // Filter out ingredients that are too long and show a warning for each
+        const validIngredients = [];
+        const invalidIngredients = [];
+
+        badIngredients.forEach((ingredient) => {
+            if (ingredient.length > 40) {
+                // If the ingredient is too long, mark it as invalid
+                invalidIngredients.push(ingredient);
+            } else {
+                // Otherwise, it's valid
+                validIngredients.push(ingredient);
+            }
+        });
+
+        // If there are any invalid ingredients, alert the user and don't save anything
+        if (invalidIngredients.length > 0) {
+            document.getElementById('status').textContent =
+                'The following ingredients were not saved: ' +
+                invalidIngredients.join(', ') +
+                '. Maximum length is 40 characters.';
+            return;
+        }
+
+        // If all ingredients are valid, proceed to save
         chrome.storage.sync.get('badIngredients', function (data) {
             let existingIngredients = data.badIngredients || [];
 
-            existingIngredients.push(...badIngredients);
+            existingIngredients.push(...validIngredients);
 
             // remove duplicates
             const uniqueIngredients = [...new Set(existingIngredients)];

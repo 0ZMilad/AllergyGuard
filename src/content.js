@@ -34,12 +34,19 @@ function handleAddToCartClick(event) {
 // Function to add click event listeners to "Add to Cart" buttons
 function addEventListenersToButtons() {
     const addToCartButtons = [
+        // Add to Basket (Add to Cart) buttons
         ...document.querySelectorAll('[id*="add-to-cart"] .a-button-input'),
         ...document.querySelectorAll('#freshAddToCartButton .a-button-input'),
         ...document.querySelectorAll(
             '.a-button-input[name="submit.add-to-cart"]'
         ),
+        ...document.querySelectorAll(
+            '.a-button-input[name="add-to-cart-button"]'
+        ),
+
+        // Buy Now buttons
         ...document.querySelectorAll('.a-button-input[name="submit.buy-now"]'),
+        ...document.querySelectorAll('[id*="buy-now-button"] .a-button-input'),
     ];
 
     addToCartButtons.forEach((button) => {
