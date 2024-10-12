@@ -79,6 +79,16 @@ async function pagination() {
         }
     });
 
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowRight' && currentPage < totalPages) {
+            currentPage++;
+            updatePage();
+        } else if (event.key === 'ArrowLeft' && currentPage > 1) {
+            currentPage--;
+            updatePage();
+        }
+    });
+
     updatePage();
 }
 
