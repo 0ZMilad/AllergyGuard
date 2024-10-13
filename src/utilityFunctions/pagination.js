@@ -3,7 +3,12 @@ import displayIngredients from './displayIngredients';
 async function pagination() {
     const itemsPerPage = 3;
 
-    let currentPage = 1;
+    // Get the current page from chrome storage or default to 1
+    let currentPage = await new Promise((resolve) => {
+        chrome.storage.sync.get('currentPage', (data) => {
+            resolve(data.currentPage || 1);
+        });
+    });
 
     const data = await chrome.storage.sync.get('badIngredients');
 
@@ -47,6 +52,9 @@ async function pagination() {
     }
 
     function updatePage() {
+        // Ensure currentPage is valid in case ingredients were removed
+        if (currentPage > totalPages) currentPage = totalPages;
+
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
@@ -63,6 +71,9 @@ async function pagination() {
 
         previousPage.disabled = currentPage === 1;
         nextPage.disabled = currentPage === totalPages;
+
+        // Save the current page to storage
+        chrome.storage.sync.set({ currentPage: currentPage });
     }
 
     nextPage.addEventListener('click', function () {
