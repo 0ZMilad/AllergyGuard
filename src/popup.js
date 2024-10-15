@@ -79,8 +79,8 @@ document.getElementById('search-bar').addEventListener('input', function () {
                 ingredient.toLowerCase().includes(query)
             );
 
-            // Display the filtered ingredients
-            displayIngredients(filteredIngredients);
+            // Paginate the filtered ingredients
+            pagination(filteredIngredients);
         }
     });
 });

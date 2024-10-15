@@ -1,6 +1,6 @@
 import displayIngredients from './displayIngredients';
 
-async function pagination() {
+async function pagination(ingredientsList = null) {
     const itemsPerPage = 3;
 
     // Get the current page from chrome storage or default to 1
@@ -10,9 +10,9 @@ async function pagination() {
         });
     });
 
+    // Use the provided list of ingredients or retrieve the full list
     const data = await chrome.storage.sync.get('badIngredients');
-
-    const badIngredients = data.badIngredients || [];
+    const badIngredients = ingredientsList || data.badIngredients || [];
 
     let totalPages;
     if (badIngredients.length === 0) {
