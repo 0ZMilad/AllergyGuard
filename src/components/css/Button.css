@@ -1,4 +1,4 @@
-button {
+.saveButton {
     display: block;
     width: 100%;
     padding: 11.25px;
@@ -11,9 +11,9 @@ button {
     transition: var(--transition);
 }
 
-button:hover {
+.saveButton:hover {
     background-color: var(--secondary-color);
-    transform: translateY(-2px);
+    transform: translateY(-0.5px);
 }
 
 #button-container {
@@ -66,4 +66,17 @@ button:hover {
 #next-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+}
+
+#toggleHideButton {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: none;
+    border: 0.1px solid transparent;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-transform: none;
 }

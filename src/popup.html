@@ -1,37 +1,38 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>AllergyGuard for Groceries</title>
-    <link rel="stylesheet" type="text/css" href="./styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <!-- <h1>AllergyGuard</h1> -->
-      <img src="./assets/images/fullLogo.png" alt="Logo" class="logo" />
-      <form id="allergy-form">
-        <div class="input-group">
-          <label for="allergy-input">Enter bad ingredients:</label>
-          <input
-            type="text"
-            id="allergy-input"
-            name="allergy-input"
-            placeholder="e.g., nuts, gluten, dairy"
-          />
+    <head>
+        <meta charset="UTF-8" />
+        <title>AllergyGuard for Groceries</title>
+        <link rel="stylesheet" type="text/css" href="./styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- <h1>AllergyGuard</h1> -->
+            <img src="./assets/images/fullLogo.png" alt="Logo" class="logo" />
+            <form id="allergy-form">
+                <div class="input-group">
+                    <label for="allergy-input">Enter bad ingredients:</label>
+                    <input
+                        type="text"
+                        id="allergy-input"
+                        name="allergy-input"
+                        placeholder="e.g., nuts, gluten, dairy"
+                    />
+                </div>
+                <button type="submit" class="saveButton">Save</button>
+            </form>
+            <div id="status"></div>
+            <div id="ingredient-list" class="hidden">
+                <h2>Flagged Ingredients</h2>
+                <input
+                    type="text"
+                    id="search-bar"
+                    placeholder="Search ingredients..."
+                />
+                <ul id="ingredient-items"></ul>
+            </div>
         </div>
-        <button type="submit">Save</button>
-      </form>
-      <div id="status"></div>
-      <div id="ingredient-list" class="hidden">
-        <h2>Flagged Ingredients</h2>
-        <input
-          type="text"
-          id="search-bar"
-          placeholder="Search ingredients..."
-        />
-        <ul id="ingredient-items"></ul>
-      </div>
-    </div>
-    <script src="../dist/popup.bundle.js"></script>
-  </body>
+        <button id="toggleHideButton">Hide</button>
+        <script src="../dist/popup.bundle.js"></script>
+    </body>
 </html>
