@@ -1,7 +1,7 @@
 import displayIngredients from './displayIngredients';
 
-async function pagination(ingredientsList = null) {
-    const itemsPerPage = 3;
+async function pagination(ingredientsList = null, itemsPPage = null) {
+    const itemsPerPage = itemsPPage ?? 3;
 
     // Get the current page from chrome storage or default to 1
     let currentPage = await new Promise((resolve) => {

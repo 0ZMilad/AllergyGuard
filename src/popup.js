@@ -103,11 +103,13 @@ function showLess() {
             form.style.opacity = '0';
             form.style.pointerEvents = 'none';
             ingredientList.style.transform = 'translateY(-150px)';
+            pagination(null, 5);
         } else {
             form.style.visibility = 'visible';
             form.style.opacity = '1';
             form.style.pointerEvents = 'auto';
             ingredientList.style.transform = 'translateY(0)';
+            pagination();
         }
     };
 
