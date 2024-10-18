@@ -95,17 +95,24 @@ chrome.storage.sync.get('badIngredients', function (data) {
 function showLess() {
     const toggleCheckbox = document.querySelector('#toggleHide input');
     const form = document.getElementById('allergy-form');
+    const ingredientList = document.getElementById('ingredient-list');
 
-    const updateFormVisibility = () => {
+    const updateVisibility = () => {
         if (toggleCheckbox.checked) {
-            form.style.display = 'none';
+            form.style.visibility = 'hidden';
+            form.style.opacity = '0';
+            form.style.pointerEvents = 'none';
+            ingredientList.style.transform = 'translateY(-150px)';
         } else {
-            form.style.display = 'block';
+            form.style.visibility = 'visible';
+            form.style.opacity = '1';
+            form.style.pointerEvents = 'auto';
+            ingredientList.style.transform = 'translateY(0)';
         }
     };
-    toggleCheckbox.addEventListener('change', updateFormVisibility);
 
-    updateFormVisibility();
+    toggleCheckbox.addEventListener('change', updateVisibility);
+    updateVisibility();
 }
 
 showLess();
