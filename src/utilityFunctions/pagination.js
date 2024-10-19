@@ -1,34 +1,44 @@
 import displayIngredients from './displayIngredients';
 
+let itemsPerPage = 3;
+let currentPage = 1;
+let totalPages = 1;
+let badIngredients = [];
+
+let nextPage;
+let previousPage;
+let pageInfo;
+let buttonContainer;
+
+let eventListenersSetUp = false;
+
 async function pagination(ingredientsList = null, itemsPPage = null) {
-    const itemsPerPage = itemsPPage ?? 3;
-
-    // Get the current page from chrome storage or default to 1
-    let currentPage = await new Promise((resolve) => {
-        chrome.storage.sync.get('currentPage', (data) => {
-            resolve(data.currentPage || 1);
-        });
-    });
-
-    // Use the provided list of ingredients or retrieve the full list
-    const data = await chrome.storage.sync.get('badIngredients');
-    const badIngredients = ingredientsList || data.badIngredients || [];
-
-    let totalPages;
-    if (badIngredients.length === 0) {
-        totalPages = 1;
-    } else {
-        totalPages = Math.ceil(badIngredients.length / itemsPerPage);
+    if (itemsPPage !== null) {
+        itemsPerPage = itemsPPage;
     }
 
-    let buttonContainer = document.getElementById('button-container');
+    // Retrieve the list of bad ingredients and current page from storage
+    const data = await chrome.storage.sync.get([
+        'badIngredients',
+        'currentPage',
+    ]);
+    badIngredients = ingredientsList || data.badIngredients || [];
+    currentPage = data.currentPage || 1;
+
+    // Calculate total pages
+    totalPages =
+        badIngredients.length > 0
+            ? Math.ceil(badIngredients.length / itemsPerPage)
+            : 1;
+
+    buttonContainer = document.getElementById('button-container');
     if (!buttonContainer) {
         buttonContainer = document.createElement('div');
         buttonContainer.id = 'button-container';
         document.body.appendChild(buttonContainer);
     }
 
-    let previousPage = document.getElementById('prev-button');
+    previousPage = document.getElementById('prev-button');
     if (!previousPage) {
         previousPage = document.createElement('button');
         previousPage.textContent = '←';
@@ -36,7 +46,7 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         buttonContainer.appendChild(previousPage);
     }
 
-    let nextPage = document.getElementById('next-button');
+    nextPage = document.getElementById('next-button');
     if (!nextPage) {
         nextPage = document.createElement('button');
         nextPage.textContent = '→';
@@ -44,53 +54,66 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         buttonContainer.appendChild(nextPage);
     }
 
-    let pageInfo = document.getElementById('page-info');
+    pageInfo = document.getElementById('page-info');
     if (!pageInfo) {
         pageInfo = document.createElement('span');
         pageInfo.id = 'page-info';
         document.body.appendChild(pageInfo);
     }
 
-    function updatePage() {
-        // Ensure currentPage is valid in case ingredients were removed
-        if (currentPage > totalPages) currentPage = totalPages;
+    // Update the page display
+    updatePage();
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        const currentPageItems = badIngredients.slice(startIndex, endIndex);
-
-        displayIngredients(currentPageItems);
-
-        if (badIngredients.length === 0) {
-            totalPages = 1;
-            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-            nextPage.disabled = currentPage === totalPages;
-        }
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-
-        previousPage.disabled = currentPage === 1;
-        nextPage.disabled = currentPage === totalPages;
-
-        // Save the current page to storage
-        chrome.storage.sync.set({ currentPage: currentPage });
+    // Set up event listeners only once
+    if (!eventListenersSetUp) {
+        setupEventListeners();
+        eventListenersSetUp = true;
     }
+}
 
-    nextPage.addEventListener('click', function () {
+function updatePage() {
+    // Ensure currentPage is within valid range
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const currentPageItems = badIngredients.slice(startIndex, endIndex);
+
+    displayIngredients(currentPageItems);
+
+    // Update totalPages in case badIngredients changed
+    totalPages =
+        badIngredients.length > 0
+            ? Math.ceil(badIngredients.length / itemsPerPage)
+            : 1;
+
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    previousPage.disabled = currentPage === 1;
+    nextPage.disabled = currentPage === totalPages;
+
+    // Save the current page to storage
+    chrome.storage.sync.set({ currentPage: currentPage });
+}
+
+function setupEventListeners() {
+    function nextPageHandler() {
         if (currentPage < totalPages) {
             currentPage++;
             updatePage();
         }
-    });
+    }
 
-    previousPage.addEventListener('click', function () {
+    function previousPageHandler() {
         if (currentPage > 1) {
             currentPage--;
             updatePage();
         }
-    });
+    }
 
-    document.addEventListener('keydown', function (event) {
+    function keydownHandler(event) {
         if (event.key === 'ArrowRight' && currentPage < totalPages) {
             currentPage++;
             updatePage();
@@ -98,9 +121,11 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
             currentPage--;
             updatePage();
         }
-    });
+    }
 
-    updatePage();
+    nextPage.addEventListener('click', nextPageHandler);
+    previousPage.addEventListener('click', previousPageHandler);
+    document.addEventListener('keydown', keydownHandler);
 }
 
 export default pagination;

@@ -115,7 +115,7 @@ function showLess() {
             form.style.opacity = '1';
             form.style.pointerEvents = 'auto';
             ingredientList.style.transform = 'translateY(0)';
-            pagination();
+            pagination(null, 3);
         }
     };
 
