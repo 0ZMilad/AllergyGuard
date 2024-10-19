@@ -79,8 +79,14 @@ document.getElementById('search-bar').addEventListener('input', function () {
                 ingredient.toLowerCase().includes(query)
             );
 
+            const toggleCheckbox = document.querySelector('#toggleHide input');
+
             // Paginate the filtered ingredients
-            pagination(filteredIngredients);
+            if (toggleCheckbox.checked) {
+                pagination(filteredIngredients, 5);
+            } else {
+                pagination(filteredIngredients);
+            }
         }
     });
 });

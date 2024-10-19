@@ -17,8 +17,15 @@ const removeIngredient = (removeButton, ingredient, li) => {
             chrome.storage.sync.set(
                 { badIngredients: updatedIngredients },
                 function () {
+                    const toggleCheckbox =
+                        document.querySelector('#toggleHide input');
+
                     // Reinitialise pagination with the updated list of ingredients
-                    pagination();
+                    if (toggleCheckbox.checked) {
+                        pagination(null, 5);
+                    } else {
+                        pagination();
+                    }
                 }
             );
         });
