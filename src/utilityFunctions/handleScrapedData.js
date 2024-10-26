@@ -1,8 +1,12 @@
 import displayResults from './displayResults';
 
-// Function to escape special characters in regex
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// Function to normalise ingredient strings
+function normaliseIngredient(ingredient) {
+    return ingredient
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 // Function to retrieve bad ingredients from storage
@@ -40,26 +44,20 @@ async function handleScrapedData(data) {
 
         const matchedBadIngredients = new Set();
 
-        // Create a single regex pattern for all bad ingredients
-        const badIngredientsPattern = existingIngredients
-            .map(escapeRegExp)
-            .join('|');
+        // Normalise bad ingredients
+        const normalisedBadIngredients =
+            existingIngredients.map(normaliseIngredient);
 
-        if (!badIngredientsPattern) {
-            console.log('Bad ingredients pattern is empty.');
-            displayResults(scrapedItemName, matchedBadIngredients);
-            return;
-        }
-
-        const regex = new RegExp(`\\b(${badIngredientsPattern})\\b`, 'gi');
-
-        // Check all ingredients at once
+        // Iterate over scraped ingredients
         for (const ingredient of scrapedIngredients) {
-            const matches = ingredient.match(regex);
-            if (matches) {
-                matches.forEach((match) =>
-                    matchedBadIngredients.add(match.toLowerCase())
-                );
+            const normalisedScrapedIngredient = normaliseIngredient(ingredient);
+
+            // Check if any bad ingredient is included in the scraped ingredient
+            for (let i = 0; i < normalisedBadIngredients.length; i++) {
+                const badIngredient = normalisedBadIngredients[i];
+                if (normalisedScrapedIngredient.includes(badIngredient)) {
+                    matchedBadIngredients.add(existingIngredients[i]);
+                }
             }
         }
 
