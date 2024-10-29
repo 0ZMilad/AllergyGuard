@@ -57,6 +57,9 @@ document
                     document.getElementById('status').textContent = 'Saved!';
                     displayIngredients(uniqueIngredients);
                     pagination();
+
+                    // Clear the input field
+                    document.getElementById('allergy-input').value = '';
                 }
             );
         });
