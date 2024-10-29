@@ -12,6 +12,9 @@ let buttonContainer;
 
 let eventListenersSetUp = false;
 
+const ingredientList = document.getElementById('ingredient-list');
+const toggleCheckbox = document.querySelector('#toggleHide');
+
 async function pagination(ingredientsList = null, itemsPPage = null) {
     if (itemsPPage !== null) {
         itemsPerPage = itemsPPage;
@@ -81,18 +84,31 @@ function updatePage() {
 
     const currentPageItems = badIngredients.slice(startIndex, endIndex);
 
-    displayIngredients(currentPageItems);
+    // Display ingredients or hide the ingredient list and navigation if none
+    if (badIngredients.length === 0) {
+        ingredientList.style.display = 'none';
+        buttonContainer.style.display = 'none';
+        pageInfo.style.display = 'none';
+        toggleCheckbox.style.display = 'none';
+    } else {
+        ingredientList.style.display = 'block';
+        buttonContainer.style.display = 'flex';
+        pageInfo.style.display = 'inline';
+        toggleCheckbox.style.display = 'block';
 
-    // Update totalPages in case badIngredients changed
-    totalPages =
-        badIngredients.length > 0
-            ? Math.ceil(badIngredients.length / itemsPerPage)
-            : 1;
+        displayIngredients(currentPageItems);
 
-    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        // Update totalPages in case badIngredients changed
+        totalPages =
+            badIngredients.length > 0
+                ? Math.ceil(badIngredients.length / itemsPerPage)
+                : 1;
 
-    previousPage.disabled = currentPage === 1;
-    nextPage.disabled = currentPage === totalPages;
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+
+        previousPage.disabled = currentPage === 1;
+        nextPage.disabled = currentPage === totalPages;
+    }
 
     // Save the current page to storage
     chrome.storage.sync.set({ currentPage: currentPage });
