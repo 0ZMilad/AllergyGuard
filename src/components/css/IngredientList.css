@@ -38,7 +38,8 @@
 #ingredient-items li {
     display: flex;
     align-items: center;
-    padding: 10px 40px 10px 10px;
+    justify-content: space-between;
+    padding: 10px;
     background-color: #fff;
     border: 1px solid var(--border-color);
     border-radius: 6px;
@@ -47,7 +48,8 @@
     transition: var(--transition);
     box-shadow: var(--shadow-sm);
     position: relative;
-    min-height: 25px;
+    min-height: 41px;
+    height: 41px;
 }
 
 #ingredient-items li:hover {
