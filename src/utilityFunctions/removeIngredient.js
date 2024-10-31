@@ -26,6 +26,14 @@ const removeIngredient = (removeButton, ingredient, li) => {
                     } else {
                         pagination();
                     }
+
+                    // Reset form visibility and opacity if the list is empty
+                    if (updatedIngredients.length === 0) {
+                        const form = document.getElementById('allergy-form');
+                        form.style.visibility = 'visible';
+                        form.style.opacity = '1';
+                        form.style.pointerEvents = 'auto';
+                    }
                 }
             );
         });
