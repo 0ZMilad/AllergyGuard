@@ -2,6 +2,12 @@ function createDialog(message, options = {}) {
     const dialog = document.createElement('div');
     dialog.classList.add('notification-box');
 
+    // Remove any existing dialog before creating a new one
+    const existingDialog = document.querySelector('.notification-box');
+    if (existingDialog) {
+        existingDialog.remove();
+    }
+
     // Close button
     const closeButton = document.createElement('button');
     closeButton.classList.add('notification-close-button');
