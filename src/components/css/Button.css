@@ -71,15 +71,15 @@
 #toggleHide {
     position: absolute;
     top: 14px;
-    right: 237px;
+    right: 220px;
 }
 
 .switch {
-    font-size: 12px;
+    font-size: 10px;
     position: relative;
     display: inline-block;
-    width: 1em;
-    height: 2em;
+    width: 2.5em;
+    height: 1.2em;
 }
 
 .switch input {
@@ -93,27 +93,26 @@
     cursor: pointer;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
     background-color: rgb(182, 182, 182);
     transition: background-color 0.4s;
-    border-radius: 8px;
+    border-radius: 1.2em;
 }
 
-/* Ball inside the toggle switch */
 .slider:before {
     position: absolute;
     content: '';
-    width: 0.8em;
-    height: 0.8em;
+    height: 1.2em;
+    width: 1.2em;
     border-radius: 50%;
-    top: 0.1em;
-    left: 50%;
-    transform: translateX(-50%);
     background-color: rgb(255, 255, 255);
     transition:
         transform 0.4s,
         background-color 0.4s;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .switch input:checked + .slider {
@@ -121,7 +120,63 @@
 }
 
 .switch input:checked + .slider:before {
-    transform: translateX(-50%) translateY(1em);
+    transform: translateX(1.3em);
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+.switch {
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    width: 2.5em;
+    height: 1.2em;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition:
+        background-color 0.4s,
+        box-shadow 0.4s;
+    border-radius: 1.2em;
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 1.2em;
+    width: 1.2em;
+    border-radius: 50%;
+    background-color: #fff;
+    transition:
+        transform 0.4s,
+        background-color 0.4s;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.3em);
 }
 
 .switch input:focus + .slider {
