@@ -90,11 +90,13 @@ function updatePage() {
         buttonContainer.style.display = 'none';
         pageInfo.style.display = 'none';
         toggleCheckbox.style.display = 'none';
+        clearAllButton.style.display = 'none';
     } else {
         ingredientList.style.display = 'block';
         buttonContainer.style.display = 'flex';
         pageInfo.style.display = 'inline';
         toggleCheckbox.style.display = 'block';
+        clearAllButton.style.display = 'block';
 
         displayIngredients(currentPageItems);
 

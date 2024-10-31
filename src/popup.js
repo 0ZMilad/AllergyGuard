@@ -19,6 +19,10 @@ document
             return;
         }
 
+        setTimeout(() => {
+            document.getElementById('status').textContent = '';
+        }, 3000);
+
         // Filter out ingredients that are too long and show a warning for each
         const validIngredients = [];
         const invalidIngredients = [];
@@ -57,6 +61,7 @@ document
                     document.getElementById('status').textContent = 'Saved!';
                     displayIngredients(uniqueIngredients);
                     pagination();
+                    checkForFlaggedIngredients();
 
                     // Clear the input field
                     document.getElementById('allergy-input').value = '';
@@ -105,6 +110,7 @@ function showLess() {
     const toggleCheckbox = document.querySelector('#toggleHide input');
     const form = document.getElementById('allergy-form');
     const ingredientList = document.getElementById('ingredient-list');
+    const clearAllButton = document.getElementById('clearAllButton');
 
     const updateVisibility = () => {
         if (toggleCheckbox.checked) {
@@ -112,12 +118,14 @@ function showLess() {
             form.style.opacity = '0';
             form.style.pointerEvents = 'none';
             ingredientList.style.transform = 'translateY(-150px)';
+            clearAllButton.style.transform = 'translateY(-48px)';
             pagination(null, 5);
         } else {
             form.style.visibility = 'visible';
             form.style.opacity = '1';
             form.style.pointerEvents = 'auto';
             ingredientList.style.transform = 'translateY(0)';
+            clearAllButton.style.transform = 'translateY(0)';
             pagination(null, 3);
         }
     };
@@ -125,6 +133,54 @@ function showLess() {
     toggleCheckbox.addEventListener('change', updateVisibility);
     updateVisibility();
 }
+
+function checkForFlaggedIngredients() {
+    chrome.storage.sync.get('badIngredients', function (data) {
+        const clearAllButton = document.getElementById('clearAllButton');
+        if (data.badIngredients && data.badIngredients.length > 0) {
+            clearAllButton.style.display = 'block';
+            clearAllButton.style.transform = 'translateY(0)';
+        } else {
+            clearAllButton.style.display = 'none';
+        }
+    });
+}
+
+document
+    .getElementById('clearAllButton')
+    .addEventListener('click', function () {
+        const emptyIngredients = [];
+        chrome.storage.sync.set(
+            { badIngredients: emptyIngredients },
+            function () {
+                document.getElementById('status').textContent =
+                    'All ingredients cleared!';
+                setTimeout(() => {
+                    document.getElementById('status').textContent = '';
+                }, 3000);
+
+                displayIngredients(emptyIngredients);
+                pagination(emptyIngredients, 3);
+                checkForFlaggedIngredients();
+                const toggleCheckbox =
+                    document.querySelector('#toggleHide input');
+                const form = document.getElementById('allergy-form');
+                const ingredientList =
+                    document.getElementById('ingredient-list');
+
+                if (toggleCheckbox.checked) {
+                    toggleCheckbox.checked = false;
+                }
+
+                form.style.visibility = 'visible';
+                form.style.opacity = '1';
+                form.style.pointerEvents = 'auto';
+                ingredientList.style.transform = 'translateY(0)';
+            }
+        );
+    });
+
+checkForFlaggedIngredients();
 
 showLess();
 
