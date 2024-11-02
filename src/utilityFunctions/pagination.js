@@ -13,7 +13,9 @@ let buttonContainer;
 let eventListenersSetUp = false;
 
 const ingredientList = document.getElementById('ingredient-list');
-const toggleCheckbox = document.querySelector('#toggleHide');
+const toggleContainer = document.querySelector('#toggleHide');
+const toggleCheckbox = document.querySelector('#toggleHide input');
+const clearAllButton = document.getElementById('clearAllButton');
 
 async function pagination(ingredientsList = null, itemsPPage = null) {
     if (itemsPPage !== null) {
@@ -28,11 +30,25 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
     badIngredients = ingredientsList || data.badIngredients || [];
     currentPage = data.currentPage || 1;
 
+    // Reset current page to 1 if ingredientsList is provided (indicating an update)
+    if (ingredientsList !== null) {
+        currentPage = 1;
+        chrome.storage.sync.set({ currentPage: 1 });
+    }
+
     // Calculate total pages
     totalPages =
         badIngredients.length > 0
             ? Math.ceil(badIngredients.length / itemsPerPage)
             : 1;
+
+    // Show or hide the toggle based on the number of ingredients
+    if (badIngredients.length === 0) {
+        toggleCheckbox.style.display = 'none';
+    } else {
+        toggleCheckbox.style.display = 'block';
+        toggleCheckbox.disabled = false;
+    }
 
     buttonContainer = document.getElementById('button-container');
     if (!buttonContainer) {
@@ -89,13 +105,19 @@ function updatePage() {
         ingredientList.style.display = 'none';
         buttonContainer.style.display = 'none';
         pageInfo.style.display = 'none';
-        toggleCheckbox.style.display = 'none';
+        toggleContainer.style.display = 'none';
         clearAllButton.style.display = 'none';
+
+        // Uncheck the toggle if the list is empty
+        if (toggleCheckbox.checked) {
+            toggleCheckbox.checked = false;
+        }
     } else {
         ingredientList.style.display = 'block';
         buttonContainer.style.display = 'flex';
         pageInfo.style.display = 'inline';
-        toggleCheckbox.style.display = 'block';
+        toggleContainer.style.display = 'block';
+        toggleCheckbox.disabled = false;
         clearAllButton.style.display = 'block';
 
         displayIngredients(currentPageItems);
@@ -110,6 +132,12 @@ function updatePage() {
 
         previousPage.disabled = currentPage === 1;
         nextPage.disabled = currentPage === totalPages;
+    }
+
+    // Disable the toggle if the list is empty
+    if (badIngredients.length === 0) {
+        toggleCheckbox.checked = false;
+        toggleCheckbox.disabled = true;
     }
 
     // Save the current page to storage
