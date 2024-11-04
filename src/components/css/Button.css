@@ -1,4 +1,4 @@
-button {
+.saveButton {
     display: block;
     width: 100%;
     padding: 11.25px;
@@ -11,9 +11,9 @@ button {
     transition: var(--transition);
 }
 
-button:hover {
+.saveButton:hover {
     background-color: var(--secondary-color);
-    transform: translateY(-2px);
+    transform: translateY(-0.5px);
 }
 
 #button-container {
@@ -66,4 +66,146 @@ button:hover {
 #next-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+}
+
+#toggleHide {
+    position: absolute;
+    top: 14px;
+    right: 220px;
+}
+
+.switch {
+    font-size: 10px;
+    position: relative;
+    display: inline-block;
+    width: 2.5em;
+    height: 1.2em;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(182, 182, 182);
+    transition: background-color 0.4s;
+    border-radius: 1.2em;
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 1.2em;
+    width: 1.2em;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    transition:
+        transform 0.4s,
+        background-color 0.4s;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+    background-color: #21cc4c;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.3em);
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+.switch {
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    width: 2.5em;
+    height: 1.2em;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition:
+        background-color 0.4s,
+        box-shadow 0.4s;
+    border-radius: 1.2em;
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 1.2em;
+    width: 1.2em;
+    border-radius: 50%;
+    background-color: #fff;
+    transition:
+        transform 0.4s,
+        background-color 0.4s;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.3em);
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+#clearAllButton {
+    position: absolute;
+    bottom: -25px;
+    right: 8px;
+    padding: 5px 10px;
+    background: linear-gradient(
+        135deg,
+        var(--primary-color),
+        var(--secondary-color)
+    );
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: background-color 0.2s;
+    z-index: 10000;
+}
+
+#clearAllButton:hover {
+    background: linear-gradient(
+        135deg,
+        var(--secondary-color),
+        var(--primary-color)
+    );
 }
