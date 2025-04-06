@@ -1,25 +1,25 @@
 {
-    "name": "allergyguard",
-    "version": "1.0.0",
-    "description": "AllergyGuard is a powerful browser extension designed to help users identify and avoid ingredients that are harmful or undesirable based on their personal dietary restrictions or allergies. By scraping ingredient lists from product pages and cross-referencing them with a user-defined list of bad ingredients, AllergyGuard provides real-time alerts and insights, making grocery shopping online safer and more convenient.",
-    "main": "background.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack --mode=production --node-env=production",
-        "build:dev": "webpack --mode=development",
-        "watch": "webpack --watch"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@babel/core": "^7.25.2",
-        "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-        "@babel/preset-env": "^7.25.4",
-        "@webpack-cli/generators": "^3.0.7",
-        "babel-loader": "^9.2.1",
-        "prettier": "3.3.3",
-        "webpack": "^5.94.0",
-        "webpack-cli": "^5.1.4"
-    }
+  "name": "allergyguard",
+  "version": "1.0.0",
+  "description": "AllergyGuard is a powerful browser extension designed to help users identify and avoid ingredients that are harmful or undesirable based on their personal dietary restrictions or allergies. By scraping ingredient lists from product pages and cross-referencing them with a user-defined list of bad ingredients, AllergyGuard provides real-time alerts and insights, making grocery shopping online safer and more convenient.",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./config/webpack.config.js --mode=production --node-env=production",
+    "build:dev": "webpack --config ./config/webpack.config.js --mode=development",
+    "watch": "webpack --config ./config/webpack.config.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.25.4",
+    "@webpack-cli/generators": "^3.0.7",
+    "babel-loader": "^9.2.1",
+    "prettier": "3.3.3",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  }
 }

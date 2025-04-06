@@ -4,12 +4,12 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 const config = {
     entry: {
-        background: './src/background.js',
-        content: './src/content.js',
-        popup: './src/popup.js',
+        background: path.resolve(__dirname, '../src/background.js'),
+        content: path.resolve(__dirname, '../src/content.js'),
+        popup: path.resolve(__dirname, '../src/popup.js'),
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
         filename: '[name].bundle.js',
     },
     resolve: {
