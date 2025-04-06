@@ -22,7 +22,6 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         itemsPerPage = itemsPPage;
     }
 
-    // Retrieve the list of bad ingredients and current page from storage
     const data = await chrome.storage.sync.get([
         'badIngredients',
         'currentPage',
@@ -30,19 +29,16 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
     badIngredients = ingredientsList || data.badIngredients || [];
     currentPage = data.currentPage || 1;
 
-    // Reset current page to 1 if ingredientsList is provided (indicating an update)
     if (ingredientsList !== null) {
         currentPage = 1;
         chrome.storage.sync.set({ currentPage: 1 });
     }
 
-    // Calculate total pages
     totalPages =
         badIngredients.length > 0
             ? Math.ceil(badIngredients.length / itemsPerPage)
             : 1;
 
-    // Show or hide the toggle based on the number of ingredients
     if (badIngredients.length === 0) {
         toggleCheckbox.style.display = 'none';
     } else {
@@ -57,12 +53,28 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         document.body.appendChild(buttonContainer);
     }
 
+    let prevPlaceholder = document.getElementById('prev-placeholder');
+    if (!prevPlaceholder) {
+        prevPlaceholder = document.createElement('div');
+        prevPlaceholder.id = 'prev-placeholder';
+        prevPlaceholder.style.display = 'inline-block';
+        buttonContainer.appendChild(prevPlaceholder);
+    }
+
     previousPage = document.getElementById('prev-button');
     if (!previousPage) {
         previousPage = document.createElement('button');
         previousPage.textContent = '←';
         previousPage.id = 'prev-button';
-        buttonContainer.appendChild(previousPage);
+        prevPlaceholder.appendChild(previousPage);
+    }
+
+    let nextPlaceholder = document.getElementById('next-placeholder');
+    if (!nextPlaceholder) {
+        nextPlaceholder = document.createElement('div');
+        nextPlaceholder.id = 'next-placeholder';
+        nextPlaceholder.style.display = 'inline-block';
+        buttonContainer.appendChild(nextPlaceholder);
     }
 
     nextPage = document.getElementById('next-button');
@@ -70,7 +82,7 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         nextPage = document.createElement('button');
         nextPage.textContent = '→';
         nextPage.id = 'next-button';
-        buttonContainer.appendChild(nextPage);
+        nextPlaceholder.appendChild(nextPage);
     }
 
     pageInfo = document.getElementById('page-info');
@@ -80,10 +92,8 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
         document.body.appendChild(pageInfo);
     }
 
-    // Update the page display
     updatePage();
 
-    // Set up event listeners only once
     if (!eventListenersSetUp) {
         setupEventListeners();
         eventListenersSetUp = true;
@@ -91,7 +101,6 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
 }
 
 function updatePage() {
-    // Ensure currentPage is within valid range
     if (currentPage > totalPages) currentPage = totalPages;
     if (currentPage < 1) currentPage = 1;
 
@@ -100,7 +109,6 @@ function updatePage() {
 
     const currentPageItems = badIngredients.slice(startIndex, endIndex);
 
-    // Display ingredients or hide the ingredient list and navigation if none
     if (badIngredients.length === 0) {
         ingredientList.style.display = 'none';
         buttonContainer.style.display = 'none';
@@ -108,7 +116,6 @@ function updatePage() {
         toggleContainer.style.display = 'none';
         clearAllButton.style.display = 'none';
 
-        // Uncheck the toggle if the list is empty
         if (toggleCheckbox.checked) {
             toggleCheckbox.checked = false;
         }
@@ -118,11 +125,16 @@ function updatePage() {
         pageInfo.style.display = 'inline';
         toggleContainer.style.display = 'block';
         toggleCheckbox.disabled = false;
-        clearAllButton.style.display = 'block';
+
+        if (currentPage === totalPages) {
+            clearAllButton.style.display = 'block';
+            clearAllButton.style.transform = 'translateY(0)';
+        } else {
+            clearAllButton.style.display = 'none';
+        }
 
         displayIngredients(currentPageItems);
 
-        // Update totalPages in case badIngredients changed
         totalPages =
             badIngredients.length > 0
                 ? Math.ceil(badIngredients.length / itemsPerPage)
@@ -130,17 +142,27 @@ function updatePage() {
 
         pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
+        if (currentPage === 1) {
+            previousPage.style.display = 'none';
+        } else {
+            previousPage.style.display = 'inline-block';
+        }
+
+        if (currentPage === totalPages) {
+            nextPage.style.display = 'none';
+        } else {
+            nextPage.style.display = 'inline-block';
+        }
+
         previousPage.disabled = currentPage === 1;
         nextPage.disabled = currentPage === totalPages;
     }
 
-    // Disable the toggle if the list is empty
     if (badIngredients.length === 0) {
         toggleCheckbox.checked = false;
         toggleCheckbox.disabled = true;
     }
 
-    // Save the current page to storage
     chrome.storage.sync.set({ currentPage: currentPage });
 }
 

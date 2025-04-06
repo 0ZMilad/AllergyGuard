@@ -1,7 +1,6 @@
 import pagination from './utilityFunctions/pagination';
 import displayIngredients from './utilityFunctions/displayIngredients';
 
-// Event listener for the form submission to save bad ingredients
 document
     .getElementById('allergy-form')
     .addEventListener('submit', function (event) {
@@ -12,7 +11,6 @@ document
             .map((item) => item.trim())
             .filter((item) => item !== '');
 
-        // alert if user tries to add empty ingredient
         if (badIngredients.length === 0) {
             document.getElementById('status').textContent =
                 'Please enter at least one ingredient!';
@@ -23,21 +21,17 @@ document
             document.getElementById('status').textContent = '';
         }, 3000);
 
-        // Filter out ingredients that are too long and show a warning for each
         const validIngredients = [];
         const invalidIngredients = [];
 
         badIngredients.forEach((ingredient) => {
             if (ingredient.length > 40) {
-                // If the ingredient is too long, mark it as invalid
                 invalidIngredients.push(ingredient);
             } else {
-                // Otherwise, it's valid
                 validIngredients.push(ingredient);
             }
         });
 
-        // If there are any invalid ingredients, alert the user and don't save anything
         if (invalidIngredients.length > 0) {
             document.getElementById('status').textContent =
                 'The following ingredients were not saved: ' +
@@ -46,19 +40,38 @@ document
             return;
         }
 
-        // If all ingredients are valid, proceed to save
         chrome.storage.sync.get('badIngredients', function (data) {
             let existingIngredients = data.badIngredients || [];
 
+            const newIngredients = validIngredients.filter(
+                (ingredient) => !existingIngredients.includes(ingredient)
+            );
+
+            const alreadyExistingIngredients = validIngredients.filter(
+                (ingredient) => existingIngredients.includes(ingredient)
+            );
+
             existingIngredients.push(...validIngredients);
 
-            // remove duplicates
             const uniqueIngredients = [...new Set(existingIngredients)];
 
             chrome.storage.sync.set(
                 { badIngredients: uniqueIngredients, currentPage: 1 },
                 function () {
-                    document.getElementById('status').textContent = 'Saved!';
+                    if (
+                        newIngredients.length > 0 &&
+                        alreadyExistingIngredients.length > 0
+                    ) {
+                        document.getElementById('status').textContent =
+                            `Added ${newIngredients.length} new ingredient(s). ${alreadyExistingIngredients.length} already existed.`;
+                    } else if (newIngredients.length > 0) {
+                        document.getElementById('status').textContent =
+                            'Saved!';
+                    } else if (validIngredients.length > 0) {
+                        document.getElementById('status').textContent =
+                            'Ingredients already in your list!';
+                    }
+
                     displayIngredients(uniqueIngredients);
                     const toggleCheckbox =
                         document.querySelector('#toggleHide input');
@@ -69,10 +82,8 @@ document
                     }
                     checkForFlaggedIngredients();
 
-                    // Clear the input field
                     document.getElementById('allergy-input').value = '';
 
-                    // Ensure the form and ingredient list are updated based on the toggle state
                     const form = document.getElementById('allergy-form');
                     const ingredientList =
                         document.getElementById('ingredient-list');
@@ -84,13 +95,13 @@ document
                         form.style.opacity = '0';
                         form.style.pointerEvents = 'none';
                         ingredientList.style.transform = 'translateY(-150px)';
-                        clearAllButton.style.transform = 'translateY(-48px)';
+                        clearAllButton.style.transform = '';
                     } else {
                         form.style.visibility = 'visible';
                         form.style.opacity = '1';
                         form.style.pointerEvents = 'auto';
                         ingredientList.style.transform = 'translateY(0)';
-                        clearAllButton.style.transform = 'translateY(0)';
+                        clearAllButton.style.transform = '';
                         toggleCheckbox.disabled = false;
                     }
                 }
@@ -98,26 +109,21 @@ document
         });
     });
 
-// Event listener for the search bar to filter ingredients
 document.getElementById('search-bar').addEventListener('input', function () {
     const query = this.value.toLowerCase();
 
-    // Retrieve all ingredients from storage
     chrome.storage.sync.get('badIngredients', function (data) {
         const allIngredients = data.badIngredients || [];
 
         if (query === '') {
-            // If the search query is empty, reinitialise pagination
             pagination();
         } else {
-            // Filter ingredients based on the search query
             const filteredIngredients = allIngredients.filter((ingredient) =>
                 ingredient.toLowerCase().includes(query)
             );
 
             const toggleCheckbox = document.querySelector('#toggleHide input');
 
-            // Paginate the filtered ingredients
             if (toggleCheckbox.checked) {
                 pagination(filteredIngredients, 5);
             } else {
@@ -127,13 +133,12 @@ document.getElementById('search-bar').addEventListener('input', function () {
     });
 });
 
-// Load saved ingredients from storage and display them
 chrome.storage.sync.get('badIngredients', function (data) {
     if (data.badIngredients && data.badIngredients.length > 0) {
         displayIngredients(data.badIngredients);
     }
     checkForFlaggedIngredients();
-    pagination(); // Initialise pagination after checking for ingredients
+    pagination();
 });
 
 function showLess() {
@@ -149,14 +154,14 @@ function showLess() {
             form.style.opacity = '0';
             form.style.pointerEvents = 'none';
             ingredientList.style.transform = 'translateY(-150px)';
-            clearAllButton.style.transform = 'translateY(-48px)';
+            clearAllButton.style.transform = '';
             pagination(null, 5);
         } else {
             form.style.visibility = 'visible';
             form.style.opacity = '1';
             form.style.pointerEvents = 'auto';
             ingredientList.style.transform = 'translateY(0)';
-            clearAllButton.style.transform = 'translateY(0)';
+            clearAllButton.style.transform = '';
             pagination(null, 3);
         }
     };
@@ -172,7 +177,7 @@ function checkForFlaggedIngredients() {
         const toggleCheckbox = document.querySelector('#toggleHide input');
         if (data.badIngredients && data.badIngredients.length > 0) {
             clearAllButton.style.display = 'block';
-            clearAllButton.style.transform = 'translateY(0)';
+            clearAllButton.style.transform = '';
             toggleContainer.style.display = 'block';
             toggleCheckbox.disabled = false;
         } else {
@@ -215,7 +220,6 @@ document
                 form.style.pointerEvents = 'auto';
                 ingredientList.style.transform = 'translateY(0)';
 
-                // Hide the toggle if the list is empty
                 toggleCheckbox.style.display = 'none';
             }
         );

@@ -1,4 +1,3 @@
-// Function to shorten long item names
 function shortenItemName(name, maxLength) {
     if (name.length > maxLength) {
         return name.substring(0, maxLength) + '...';
@@ -7,13 +6,11 @@ function shortenItemName(name, maxLength) {
     }
 }
 
-// Function to display results to the user
 function displayResults(itemName, matchedIngredients) {
     const badIngredientsArray = [...matchedIngredients];
 
-    const maxItemNameLength = 20; // Max length for item names
+    const maxItemNameLength = 20;
 
-    // Shorten long item names
     const displayedItemName = shortenItemName(itemName, maxItemNameLength);
 
     if (badIngredientsArray.length > 0) {
