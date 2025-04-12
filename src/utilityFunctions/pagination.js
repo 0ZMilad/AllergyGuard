@@ -13,9 +13,8 @@ let buttonContainer;
 let eventListenersSetUp = false;
 
 const ingredientList = document.getElementById('ingredient-list');
-const toggleContainer = document.querySelector('#toggleHide');
-const toggleCheckbox = document.querySelector('#toggleHide input');
 const clearAllButton = document.getElementById('clearAllButton');
+const hideButton = document.getElementById('hideButton');
 
 async function pagination(ingredientsList = null, itemsPPage = null) {
     if (itemsPPage !== null) {
@@ -25,6 +24,7 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
     const data = await chrome.storage.sync.get([
         'badIngredients',
         'currentPage',
+        'isHidden'
     ]);
     badIngredients = ingredientsList || data.badIngredients || [];
     currentPage = data.currentPage || 1;
@@ -40,10 +40,9 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
             : 1;
 
     if (badIngredients.length === 0) {
-        toggleCheckbox.style.display = 'none';
+        hideButton.style.display = 'none';
     } else {
-        toggleCheckbox.style.display = 'block';
-        toggleCheckbox.disabled = false;
+        hideButton.style.display = 'block';
     }
 
     buttonContainer = document.getElementById('button-container');
@@ -113,18 +112,13 @@ function updatePage() {
         ingredientList.style.display = 'none';
         buttonContainer.style.display = 'none';
         pageInfo.style.display = 'none';
-        toggleContainer.style.display = 'none';
+        hideButton.style.display = 'none';
         clearAllButton.style.display = 'none';
-
-        if (toggleCheckbox.checked) {
-            toggleCheckbox.checked = false;
-        }
     } else {
         ingredientList.style.display = 'block';
         buttonContainer.style.display = 'flex';
         pageInfo.style.display = 'inline';
-        toggleContainer.style.display = 'block';
-        toggleCheckbox.disabled = false;
+        hideButton.style.display = 'block';
 
         if (currentPage === totalPages) {
             clearAllButton.style.display = 'block';
@@ -156,11 +150,6 @@ function updatePage() {
 
         previousPage.disabled = currentPage === 1;
         nextPage.disabled = currentPage === totalPages;
-    }
-
-    if (badIngredients.length === 0) {
-        toggleCheckbox.checked = false;
-        toggleCheckbox.disabled = true;
     }
 
     chrome.storage.sync.set({ currentPage: currentPage });

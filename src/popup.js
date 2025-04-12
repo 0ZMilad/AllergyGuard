@@ -56,7 +56,7 @@ document
             const uniqueIngredients = [...new Set(existingIngredients)];
 
             chrome.storage.sync.set(
-                { badIngredients: uniqueIngredients, currentPage: 1 },
+                { badIngredients: uniqueIngredients, currentPage: 1, isHidden: false },
                 function () {
                     if (
                         newIngredients.length > 0 &&
@@ -73,37 +73,18 @@ document
                     }
 
                     displayIngredients(uniqueIngredients);
-                    const toggleCheckbox =
-                        document.querySelector('#toggleHide input');
-                    if (toggleCheckbox.checked) {
-                        pagination(null, 5);
-                    } else {
-                        pagination(null, 3);
-                    }
+                    chrome.storage.sync.get('isHidden', function (data) {
+                        const isHidden = data.isHidden || false;
+                        if (isHidden) {
+                            pagination(null, 5);
+                        } else {
+                            pagination(null, 3);
+                        }
+                        updateUIBasedOnHiddenState(isHidden);
+                    });
                     checkForFlaggedIngredients();
 
                     document.getElementById('allergy-input').value = '';
-
-                    const form = document.getElementById('allergy-form');
-                    const ingredientList =
-                        document.getElementById('ingredient-list');
-                    const clearAllButton =
-                        document.getElementById('clearAllButton');
-
-                    if (toggleCheckbox.checked) {
-                        form.style.visibility = 'hidden';
-                        form.style.opacity = '0';
-                        form.style.pointerEvents = 'none';
-                        ingredientList.style.transform = 'translateY(-150px)';
-                        clearAllButton.style.transform = '';
-                    } else {
-                        form.style.visibility = 'visible';
-                        form.style.opacity = '1';
-                        form.style.pointerEvents = 'auto';
-                        ingredientList.style.transform = 'translateY(0)';
-                        clearAllButton.style.transform = '';
-                        toggleCheckbox.disabled = false;
-                    }
                 }
             );
         });
@@ -112,8 +93,9 @@ document
 document.getElementById('search-bar').addEventListener('input', function () {
     const query = this.value.toLowerCase();
 
-    chrome.storage.sync.get('badIngredients', function (data) {
+    chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
         const allIngredients = data.badIngredients || [];
+        const isHidden = data.isHidden || false;
 
         if (query === '') {
             pagination();
@@ -122,9 +104,7 @@ document.getElementById('search-bar').addEventListener('input', function () {
                 ingredient.toLowerCase().includes(query)
             );
 
-            const toggleCheckbox = document.querySelector('#toggleHide input');
-
-            if (toggleCheckbox.checked) {
+            if (isHidden) {
                 pagination(filteredIngredients, 5);
             } else {
                 pagination(filteredIngredients);
@@ -133,58 +113,75 @@ document.getElementById('search-bar').addEventListener('input', function () {
     });
 });
 
-chrome.storage.sync.get('badIngredients', function (data) {
+chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
+    const isHidden = data.isHidden || false;
     if (data.badIngredients && data.badIngredients.length > 0) {
         displayIngredients(data.badIngredients);
     }
     checkForFlaggedIngredients();
+    updateUIBasedOnHiddenState(isHidden);
     pagination();
 });
 
-function showLess() {
-    const toggleContainer = document.querySelector('#toggleHide');
-    const toggleCheckbox = document.querySelector('#toggleHide input');
+function updateUIBasedOnHiddenState(isHidden) {
     const form = document.getElementById('allergy-form');
     const ingredientList = document.getElementById('ingredient-list');
-    const clearAllButton = document.getElementById('clearAllButton');
+    const hideButton = document.getElementById('hideButton');
 
-    const updateVisibility = () => {
-        if (toggleCheckbox.checked) {
-            form.style.visibility = 'hidden';
-            form.style.opacity = '0';
-            form.style.pointerEvents = 'none';
-            ingredientList.style.transform = 'translateY(-150px)';
-            clearAllButton.style.transform = '';
-            pagination(null, 5);
-        } else {
-            form.style.visibility = 'visible';
-            form.style.opacity = '1';
-            form.style.pointerEvents = 'auto';
-            ingredientList.style.transform = 'translateY(0)';
-            clearAllButton.style.transform = '';
-            pagination(null, 3);
-        }
-    };
-
-    toggleCheckbox.addEventListener('change', updateVisibility);
-    updateVisibility();
+    if (isHidden) {
+        form.style.visibility = 'hidden';
+        form.style.opacity = '0';
+        form.style.pointerEvents = 'none';
+        ingredientList.style.transform = 'translateY(-150px)';
+        hideButton.textContent = 'Show';
+    } else {
+        form.style.visibility = 'visible';
+        form.style.opacity = '1';
+        form.style.pointerEvents = 'auto';
+        ingredientList.style.transform = 'translateY(0)';
+        hideButton.textContent = 'Hide';
+    }
 }
+
+document.getElementById('hideButton').addEventListener('click', function() {
+    chrome.storage.sync.get('isHidden', function(data) {
+        const currentState = data.isHidden || false;
+        const newState = !currentState;
+        
+        chrome.storage.sync.set({ isHidden: newState }, function() {
+            updateUIBasedOnHiddenState(newState);
+            if (newState) {
+                pagination(null, 5);
+            } else {
+                pagination(null, 3);
+            }
+        });
+    });
+});
 
 function checkForFlaggedIngredients() {
     chrome.storage.sync.get('badIngredients', function (data) {
         const clearAllButton = document.getElementById('clearAllButton');
-        const toggleContainer = document.querySelector('#toggleHide');
-        const toggleCheckbox = document.querySelector('#toggleHide input');
+        const hideButton = document.getElementById('hideButton');
         if (data.badIngredients && data.badIngredients.length > 0) {
-            clearAllButton.style.display = 'block';
-            clearAllButton.style.transform = '';
-            toggleContainer.style.display = 'block';
-            toggleCheckbox.disabled = false;
+            chrome.storage.sync.get('isHidden', function(hiddenData) {
+                const isHidden = hiddenData.isHidden || false;
+                const itemsPerPage = isHidden ? 5 : 3;
+                const totalPages = Math.ceil(data.badIngredients.length / itemsPerPage);
+                const currentPage = data.currentPage || 1;
+
+                if (currentPage === totalPages) {
+                    clearAllButton.style.display = 'block';
+                    clearAllButton.style.transform = '';
+                } else {
+                    clearAllButton.style.display = 'none';
+                }
+                
+                hideButton.style.display = 'block';
+            });
         } else {
             clearAllButton.style.display = 'none';
-            toggleCheckbox.checked = false;
-            toggleCheckbox.disabled = true;
-            toggleContainer.style.display = 'none';
+            hideButton.style.display = 'none';
         }
     });
 }
@@ -194,7 +191,7 @@ document
     .addEventListener('click', function () {
         const emptyIngredients = [];
         chrome.storage.sync.set(
-            { badIngredients: emptyIngredients },
+            { badIngredients: emptyIngredients, isHidden: false },
             function () {
                 document.getElementById('status').textContent =
                     'All ingredients cleared!';
@@ -205,25 +202,18 @@ document
                 displayIngredients(emptyIngredients);
                 pagination(emptyIngredients, 3);
                 checkForFlaggedIngredients();
-                const toggleCheckbox =
-                    document.querySelector('#toggleHide input');
+                updateUIBasedOnHiddenState(false);
+
                 const form = document.getElementById('allergy-form');
                 const ingredientList =
                     document.getElementById('ingredient-list');
-
-                if (toggleCheckbox.checked) {
-                    toggleCheckbox.checked = false;
-                }
 
                 form.style.visibility = 'visible';
                 form.style.opacity = '1';
                 form.style.pointerEvents = 'auto';
                 ingredientList.style.transform = 'translateY(0)';
-
-                toggleCheckbox.style.display = 'none';
             }
         );
     });
 
-showLess();
 pagination();
