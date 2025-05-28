@@ -1,6 +1,6 @@
 import pagination from './utilityFunctions/pagination';
 import displayIngredients from './utilityFunctions/displayIngredients';
-
+import './components/js/alert-dialog.js';
 document
     .getElementById('allergy-form')
     .addEventListener('submit', function (event) {
@@ -12,14 +12,11 @@ document
             .filter((item) => item !== '');
 
         if (badIngredients.length === 0) {
-            document.getElementById('status').textContent =
-                'Please enter at least one ingredient!';
+            createDialog('Please enter at least one ingredient!', {
+                autoDismiss: 3000,
+            });
             return;
         }
-
-        setTimeout(() => {
-            document.getElementById('status').textContent = '';
-        }, 3000);
 
         const validIngredients = [];
         const invalidIngredients = [];
@@ -33,10 +30,12 @@ document
         });
 
         if (invalidIngredients.length > 0) {
-            document.getElementById('status').textContent =
+            createDialog(
                 'The following ingredients were not saved: ' +
                 invalidIngredients.join(', ') +
-                '. Maximum length is 40 characters.';
+                '. Maximum length is 40 characters.',
+                { autoDismiss: 4000 }
+            );
             return;
         }
 
@@ -62,14 +61,18 @@ document
                         newIngredients.length > 0 &&
                         alreadyExistingIngredients.length > 0
                     ) {
-                        document.getElementById('status').textContent =
-                            `Added ${newIngredients.length} new ingredient(s). ${alreadyExistingIngredients.length} already existed.`;
+                        createDialog(
+                            `Added ${newIngredients.length} new ingredient(s). ${alreadyExistingIngredients.length} already existed.`,
+                            { autoDismiss: 3000 }
+                        );
                     } else if (newIngredients.length > 0) {
-                        document.getElementById('status').textContent =
-                            'Saved!';
+                        createDialog('Ingredients saved successfully!', {
+                            autoDismiss: 2000,
+                        });
                     } else if (validIngredients.length > 0) {
-                        document.getElementById('status').textContent =
-                            'Ingredients already in your list!';
+                        createDialog('Ingredients already in your list!', {
+                            autoDismiss: 2000,
+                        });
                     }
 
                     displayIngredients(uniqueIngredients);
@@ -193,11 +196,9 @@ document
         chrome.storage.sync.set(
             { badIngredients: emptyIngredients, isHidden: false },
             function () {
-                document.getElementById('status').textContent =
-                    'All ingredients cleared!';
-                setTimeout(() => {
-                    document.getElementById('status').textContent = '';
-                }, 3000);
+                createDialog('All ingredients cleared!', { 
+                    autoDismiss: 2000 
+                });
 
                 displayIngredients(emptyIngredients);
                 pagination(emptyIngredients, 3);
