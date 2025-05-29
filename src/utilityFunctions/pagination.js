@@ -16,7 +16,7 @@ const ingredientList = document.getElementById('ingredient-list');
 const clearAllButton = document.getElementById('clearAllButton');
 const hideButton = document.getElementById('hideButton');
 
-async function pagination(ingredientsList = null, itemsPPage = null) {
+async function pagination(ingredientsList = null, itemsPPage = null, resetPage = true) {
     if (itemsPPage !== null) {
         itemsPerPage = itemsPPage;
     }
@@ -29,7 +29,7 @@ async function pagination(ingredientsList = null, itemsPPage = null) {
     badIngredients = ingredientsList || data.badIngredients || [];
     currentPage = data.currentPage || 1;
 
-    if (ingredientsList !== null) {
+    if (ingredientsList !== null && resetPage) {
         currentPage = 1;
         chrome.storage.sync.set({ currentPage: 1 });
     }

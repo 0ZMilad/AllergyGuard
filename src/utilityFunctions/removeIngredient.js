@@ -15,8 +15,8 @@ const removeIngredient = (removeButton, ingredient, li) => {
                         document.querySelector('#toggleHide');
                     const toggleCheckbox =
                         document.querySelector('#toggleHide input');
-
-                    if (updatedIngredients.length === 0) {
+                                          
+                        if (updatedIngredients.length === 0) {
                         chrome.storage.sync.set(
                             { currentPage: 1 },
                             function () {
@@ -33,21 +33,32 @@ const removeIngredient = (removeButton, ingredient, li) => {
                                     document.getElementById('clearAllButton');
                                 clearAllButton.style.transform = '';
 
-                                toggleCheckbox.checked = false;
-                                toggleCheckbox.disabled = true;
-                                toggleContainer.style.display = 'none';
+                                if (toggleCheckbox) {
+                                    toggleCheckbox.checked = false;
+                                    toggleCheckbox.disabled = true;
+                                }
+                                if (toggleContainer) {
+                                    toggleContainer.style.display = 'none';
+                                }
 
                                 pagination(updatedIngredients, 3);
                             }
-                        );
-                    } else {
-                        const toggleCheckbox =
-                            document.querySelector('#toggleHide input');
-                        if (toggleCheckbox.checked) {
-                            pagination(updatedIngredients, 5);
-                        } else {
-                            pagination(updatedIngredients, 3);
-                        }
+                        );                    } else {
+                        chrome.storage.sync.get(['currentPage', 'isHidden'], function(pageData) {
+                            const toggleCheckbox = document.querySelector('#toggleHide input');
+                            const isHidden = pageData.isHidden || false;
+                            const itemsPerPage = (toggleCheckbox && toggleCheckbox.checked) || isHidden ? 5 : 3;
+                            const currentPage = pageData.currentPage || 1;
+                            
+                            const newTotalPages = Math.ceil(updatedIngredients.length / itemsPerPage);
+                            if (currentPage > newTotalPages) {
+                                chrome.storage.sync.set({ currentPage: newTotalPages }, function() {
+                                    pagination(updatedIngredients, itemsPerPage, false);
+                                });
+                            } else {
+                                pagination(updatedIngredients, itemsPerPage, false);
+                            }
+                        });
                     }
                 }
             );
