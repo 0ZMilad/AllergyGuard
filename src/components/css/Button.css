@@ -72,43 +72,62 @@
     position: fixed;
     bottom: 10px;
     left: 12px;
-    padding: 5px 10px;
+    padding: 0;
     background: #ffffff;
     color: var(--text-color);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.3px;
     box-shadow: var(--shadow-sm);
     z-index: 10000;
-    min-width: 40px;
-    text-align: center;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    line-height: 1;
+}
+
+#hideButton:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--hover-color);
+    border-color: var(--secondary-color);
+}
+
+#hideButton:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
 }
 
 #clearAllButton {
     position: fixed;
     bottom: 10px;
     right: 12px;
-    padding: 5px 10px;
+    padding: 0;
     background: #ffffff;
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.3px;
     transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     box-shadow: var(--shadow-sm);
     z-index: 10000;
-    min-width: 60px;
-    text-align: center;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 #clearAllButton:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
     background-color: rgba(255, 77, 77, 0.04);
     border-color: var(--remove-button-hover);

@@ -136,13 +136,15 @@ function updateUIBasedOnHiddenState(isHidden) {
         form.style.opacity = '0';
         form.style.pointerEvents = 'none';
         ingredientList.style.transform = 'translateY(-150px)';
-        hideButton.textContent = 'Show';
+        hideButton.innerHTML = '👁‍🗨';
+        hideButton.title = 'Show form';
     } else {
         form.style.visibility = 'visible';
         form.style.opacity = '1';
         form.style.pointerEvents = 'auto';
         ingredientList.style.transform = 'translateY(0)';
-        hideButton.textContent = 'Hide';
+        hideButton.innerHTML = '🙈';
+        hideButton.title = 'Hide form';
     }
 }
 
