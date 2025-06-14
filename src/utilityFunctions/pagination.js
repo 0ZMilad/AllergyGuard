@@ -4,6 +4,7 @@ let itemsPerPage = 3;
 let currentPage = 1;
 let totalPages = 1;
 let badIngredients = [];
+let isSearching = false;
 
 let nextPage;
 let previousPage;
@@ -16,7 +17,7 @@ const ingredientList = document.getElementById('ingredient-list');
 const clearAllButton = document.getElementById('clearAllButton');
 const hideButton = document.getElementById('hideButton');
 
-async function pagination(ingredientsList = null, itemsPPage = null, resetPage = true) {
+async function pagination(ingredientsList = null, itemsPPage = null, resetPage = true, searchMode = false) {
     if (itemsPPage !== null) {
         itemsPerPage = itemsPPage;
     }
@@ -28,6 +29,7 @@ async function pagination(ingredientsList = null, itemsPPage = null, resetPage =
     ]);
     badIngredients = ingredientsList || data.badIngredients || [];
     currentPage = data.currentPage || 1;
+    isSearching = searchMode;
 
     if (ingredientsList !== null && resetPage) {
         currentPage = 1;
@@ -108,7 +110,7 @@ function updatePage() {
 
     const currentPageItems = badIngredients.slice(startIndex, endIndex);
 
-    if (badIngredients.length === 0) {
+    if (badIngredients.length === 0 && !isSearching) {
         ingredientList.style.display = 'none';
         buttonContainer.style.display = 'none';
         pageInfo.style.display = 'none';
@@ -120,7 +122,12 @@ function updatePage() {
         pageInfo.style.display = 'inline';
         hideButton.style.display = 'block';
 
-        if (currentPage === totalPages) {
+        const searchBar = document.getElementById('search-bar');
+        if (searchBar && isSearching) {
+            searchBar.style.display = 'block';
+        }
+
+        if (currentPage === totalPages && badIngredients.length > 0) {
             clearAllButton.style.display = 'block';
             clearAllButton.style.transform = 'translateY(0)';
         } else {

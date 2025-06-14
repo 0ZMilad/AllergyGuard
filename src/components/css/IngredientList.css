@@ -10,7 +10,7 @@
 
 #ingredient-list {
     margin-top: 22.5px;
-    height: 190px;
+    height: auto;
 }
 
 #ingredient-list h2 {
@@ -58,6 +58,19 @@
     box-shadow: var(--shadow-md);
 }
 
+#hideButton {
+  z-index: 11;
+}
+
+.hidden-mode body {
+    height: auto;
+}
+
+.hidden-mode #ingredient-list {
+    margin-top: 0;
+    height: auto; 
+}
+
 .remove-button {
     position: absolute;
     right: 10px;
@@ -85,4 +98,10 @@
 
 #ingredient-items li:hover .remove-button {
     transform: translateY(-50%);
+}
+
+.no-results {
+    text-align: center;
+    color: #999;
+    font-style: italic;
 }

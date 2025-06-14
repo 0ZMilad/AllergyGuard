@@ -101,16 +101,16 @@ document.getElementById('search-bar').addEventListener('input', function () {
         const isHidden = data.isHidden || false;
 
         if (query === '') {
-            pagination();
+            pagination(null, isHidden ? 5 : 3, true, false);
         } else {
             const filteredIngredients = allIngredients.filter((ingredient) =>
                 ingredient.toLowerCase().includes(query)
             );
 
             if (isHidden) {
-                pagination(filteredIngredients, 5);
+                pagination(filteredIngredients, 5, true, true);
             } else {
-                pagination(filteredIngredients);
+                pagination(filteredIngredients, 3, true, true);
             }
         }
     });
@@ -127,26 +127,16 @@ chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
 });
 
 function updateUIBasedOnHiddenState(isHidden) {
-    const form = document.getElementById('allergy-form');
-    const ingredientList = document.getElementById('ingredient-list');
-    const hideButton = document.getElementById('hideButton');
+  const form = document.getElementById('allergy-form');
+  form.style.display = isHidden ? 'none' : '';
 
-    if (isHidden) {
-        form.style.visibility = 'hidden';
-        form.style.opacity = '0';
-        form.style.pointerEvents = 'none';
-        ingredientList.style.transform = 'translateY(-150px)';
-        hideButton.innerHTML = '👁‍🗨';
-        hideButton.title = 'Show form';
-    } else {
-        form.style.visibility = 'visible';
-        form.style.opacity = '1';
-        form.style.pointerEvents = 'auto';
-        ingredientList.style.transform = 'translateY(0)';
-        hideButton.innerHTML = '🙈';
-        hideButton.title = 'Hide form';
-    }
+  document.body.classList.toggle('hidden-mode', isHidden);
+
+  const hideButton = document.getElementById('hideButton');
+  hideButton.innerHTML = isHidden ? '👁‍🗨' : '🙈';
+  hideButton.title     = isHidden ? 'Show form' : 'Hide form';
 }
+
 
 document.getElementById('hideButton').addEventListener('click', function() {
     chrome.storage.sync.get('isHidden', function(data) {
