@@ -31,9 +31,11 @@ async function pagination(ingredientsList = null, itemsPPage = null, resetPage =
     currentPage = data.currentPage || 1;
     isSearching = searchMode;
 
-    if (ingredientsList !== null && resetPage) {
+    if (ingredientsList !== null && resetPage && !searchMode) {
         currentPage = 1;
         chrome.storage.sync.set({ currentPage: 1 });
+    } else if (ingredientsList !== null && resetPage && searchMode) {
+        currentPage = 1;
     }
 
     totalPages =
@@ -159,7 +161,9 @@ function updatePage() {
         nextPage.disabled = currentPage === totalPages;
     }
 
-    chrome.storage.sync.set({ currentPage: currentPage });
+    if (!isSearching) {
+        chrome.storage.sync.set({ currentPage: currentPage });
+    }
 }
 
 function setupEventListeners() {
