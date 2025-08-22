@@ -54,7 +54,7 @@
 
 #ingredient-items li:hover {
     background-color: var(--hover-color);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
 
@@ -98,6 +98,12 @@
 
 #ingredient-items li:hover .remove-button {
     transform: translateY(-50%);
+}
+
+/* Smooth removing state to avoid glitches */
+#ingredient-items li.removing {
+    overflow: hidden;
+    min-height: 0 !important;
 }
 
 .no-results {

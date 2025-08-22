@@ -13,7 +13,7 @@
 
 .saveButton:hover {
     background-color: var(--secondary-color);
-    transform: translateY(-0.5px);
+    transform: translateY(-0.25px);
 }
 
 #button-container {
