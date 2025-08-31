@@ -2,88 +2,66 @@ import handleScrapedData from './utilityFunctions/handleScrapedData';
 
 console.log('Content script loaded.');
 
-function sendUrlToBackgroundScript(url) {
-    chrome.runtime.sendMessage(
-        { message: 'log_url', url: url },
-        function (response) {
-            console.log('Received response from background script:', response);
-        }
-    );
+// Centralized add-to-cart selector list (event delegation)
+const ADD_TO_CART_SELECTORS = [
+    '[id*="add-to-cart"] .a-button-input',
+    '#freshAddToCartButton .a-button-input',
+    '.a-button-input[name="submit.add-to-cart"]',
+    '.a-button-input[name="add-to-cart-button"]',
+    '.a-button-input[name="submit.buy-now"]',
+    '[id*="buy-now-button"] .a-button-input'
+];
 
+function matchesAddToCart(target) {
+    if (!target || target.nodeType !== Node.ELEMENT_NODE) return false;
+    for (const sel of ADD_TO_CART_SELECTORS) {
+        const match = target.closest(sel);
+        if (match) return true;
+    }
+    return false;
+}
+
+function sendUrlToBackgroundScript(url) {
     chrome.runtime.sendMessage(
         { message: 'url_scrape', url: url },
         function (response) {
-            if (response.data) {
+            if (response && response.data) {
                 handleScrapedData(response.data);
-            } else if (response.error) {
+            } else if (response && response.error) {
                 console.error('Error:', response.error);
-            } else {
-                console.error('Unexpected response format:', response);
             }
         }
     );
 }
 
 let isProcessingClick = false;
+let lastSentAt = 0;
+let lastSentUrl = '';
 
-function handleAddToCartClick(event) {
+function handleDelegatedClick(event) {
+    const target = event.target;
+    if (!matchesAddToCart(target)) return;
+
     if (isProcessingClick) return;
-
     isProcessingClick = true;
 
     const url = window.location.href;
-    console.log('Add to Cart clicked. Current URL:', url);
+    const now = Date.now();
+    // Dedupe rapid repeats on same URL
+    if (url === lastSentUrl && now - lastSentAt < 1500) {
+        isProcessingClick = false;
+        return;
+    }
+    lastSentUrl = url;
+    lastSentAt = now;
+
     sendUrlToBackgroundScript(url);
-
-    setTimeout(() => (isProcessingClick = false), 1000);
-}
-
-function addEventListenersToButtons() {
-    const addToCartButtons = [
-        ...document.querySelectorAll('[id*="add-to-cart"] .a-button-input'),
-        ...document.querySelectorAll('#freshAddToCartButton .a-button-input'),
-        ...document.querySelectorAll(
-            '.a-button-input[name="submit.add-to-cart"]'
-        ),
-        ...document.querySelectorAll(
-            '.a-button-input[name="add-to-cart-button"]'
-        ),
-
-        ...document.querySelectorAll('.a-button-input[name="submit.buy-now"]'),
-        ...document.querySelectorAll('[id*="buy-now-button"] .a-button-input'),
-    ];
-
-    addToCartButtons.forEach((button) => {
-        if (!button.hasAddToCartListener) {
-            console.log('Attaching event listener to button:', button);
-            button.addEventListener('click', handleAddToCartClick);
-            button.hasAddToCartListener = true;
-        }
-    });
-
-    console.log(`Added event listeners to ${addToCartButtons.length} buttons`);
+    setTimeout(() => (isProcessingClick = false), 300);
 }
 
 function initialise() {
-    addEventListenersToButtons();
-
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    const buttons = node.querySelectorAll('.a-button-input');
-                    if (buttons.length > 0) {
-                        console.log(
-                            'New buttons added, re-attaching event listeners'
-                        );
-                        addEventListenersToButtons();
-                    }
-                }
-            });
-        });
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Single delegated listener covers dynamic DOM without MutationObserver
+    document.addEventListener('click', handleDelegatedClick, true);
 }
 
 if (document.readyState === 'loading') {

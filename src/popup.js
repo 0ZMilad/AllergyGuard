@@ -93,27 +93,28 @@ document
         });
     });
 
-document.getElementById('search-bar').addEventListener('input', function () {
-    const query = this.value.toLowerCase();
+const searchInput = document.getElementById('search-bar');
+let searchDebounce;
+searchInput.addEventListener('input', function () {
+    const raw = this.value;
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+        const query = raw.toLowerCase();
+        chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
+            const allIngredients = data.badIngredients || [];
+            const isHidden = data.isHidden || false;
 
-    chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
-        const allIngredients = data.badIngredients || [];
-        const isHidden = data.isHidden || false;
-
-        if (query === '') {
-            pagination(null, isHidden ? 5 : 3, true, false);
-        } else {
-            const filteredIngredients = allIngredients.filter((ingredient) =>
-                ingredient.toLowerCase().includes(query)
-            );
-
-            if (isHidden) {
-                pagination(filteredIngredients, 5, true, true);
+            if (query === '') {
+                pagination(null, isHidden ? 5 : 3, true, false);
             } else {
-                pagination(filteredIngredients, 3, true, true);
+                const filteredIngredients = allIngredients.filter((ingredient) =>
+                    ingredient.toLowerCase().includes(query)
+                );
+
+                pagination(filteredIngredients, isHidden ? 5 : 3, true, true);
             }
-        }
-    });
+        });
+    }, 150);
 });
 
 chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
@@ -123,7 +124,7 @@ chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
     }
     checkForFlaggedIngredients();
     updateUIBasedOnHiddenState(isHidden);
-    pagination();
+    pagination(null, isHidden ? 5 : 3);
 });
 
 function updateUIBasedOnHiddenState(isHidden) {
