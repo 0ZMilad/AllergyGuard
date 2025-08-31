@@ -7,13 +7,6 @@ Shop with confidence. AllergyGuard is a lightweight browser extension that reads
 - Add to Chrome: https://chromewebstore.google.com/detail/ALLERGYGUARD-EXTENSION-ID (coming soon)
 - If the store link isn’t live yet, you can load it unpacked to view the UI (Extensions → Developer mode → Load unpacked → select the `dist/` folder).
 
-## What it does
-
-- Scrapes ingredients on supported stores (like Amazon, Amazon Fresh, etc.).
-- Highlights matches against your personal “avoid” list.
-- Gives quick, friendly alerts without getting in your way.
-- Remembers your list so you don’t have to.
-
 ## Supported stores
 
 - Amazon (amazon.com)
@@ -31,12 +24,6 @@ Shop with confidence. AllergyGuard is a lightweight browser extension that reads
 1. Install the extension and open the popup.
 2. Add ingredients you’d like to avoid (e.g., “Peanuts”, “Soy lecithin”, “Gluten”).
 3. Visit a product page, click buy. If there’s a match, you’ll see an alert and the matching items highlighted.
-
-## Example
-
-- Your list: Peanuts, Soy lecithin
-- Product page lists: “Ingredients: Cocoa, Sugar, Soy lecithin, Vanilla…”
-- AllergyGuard shows an alert and highlights “Soy lecithin.” Simple and fast.
 
 ## Privacy
 
