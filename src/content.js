@@ -9,7 +9,7 @@ const ADD_TO_CART_SELECTORS = [
     '.a-button-input[name="submit.add-to-cart"]',
     '.a-button-input[name="add-to-cart-button"]',
     '.a-button-input[name="submit.buy-now"]',
-    '[id*="buy-now-button"] .a-button-input'
+    '[id*="buy-now-button"] .a-button-input',
 ];
 
 function matchesAddToCart(target) {

@@ -59,7 +59,7 @@
 }
 
 #hideButton {
-  z-index: 11;
+    z-index: 11;
 }
 
 .hidden-mode body {
@@ -68,7 +68,7 @@
 
 .hidden-mode #ingredient-list {
     margin-top: 0;
-    height: auto; 
+    height: auto;
 }
 
 .remove-button {

@@ -1,4 +1,3 @@
-
 .notification-box {
     position: fixed;
     top: 30px;
@@ -187,21 +186,21 @@
         top: 30px;
         max-width: 200px;
     }
-    
+
     .notification-content {
         font-size: 11px;
     }
-    
+
     .notification-match {
         width: 90%;
         max-width: 240px;
         font-size: 13px;
     }
-    
+
     .notification-match .notification-content {
         font-size: 13px;
     }
-    
+
     .notification-info .notification-content,
     .notification-scraping .notification-content {
         font-size: 12px;

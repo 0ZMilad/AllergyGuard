@@ -14,24 +14,34 @@ const removeIngredient = (removeButton, ingredient, li) => {
                 chrome.storage.sync.set(
                     { badIngredients: updatedIngredients },
                     function () {
-                        const toggleContainer = document.querySelector('#toggleHide');
-                        const toggleCheckbox = document.querySelector('#toggleHide input');
+                        const toggleContainer =
+                            document.querySelector('#toggleHide');
+                        const toggleCheckbox =
+                            document.querySelector('#toggleHide input');
 
                         if (updatedIngredients.length === 0) {
                             chrome.storage.sync.set(
                                 { currentPage: 1 },
                                 function () {
-                                    const form = document.getElementById('allergy-form');
+                                    const form =
+                                        document.getElementById('allergy-form');
                                     if (form) {
                                         form.style.visibility = 'visible';
                                         form.style.opacity = '1';
                                         form.style.pointerEvents = 'auto';
                                     }
-                                    const ingredientList = document.getElementById('ingredient-list');
+                                    const ingredientList =
+                                        document.getElementById(
+                                            'ingredient-list'
+                                        );
                                     if (ingredientList) {
-                                        ingredientList.style.transform = 'translateY(0)';
+                                        ingredientList.style.transform =
+                                            'translateY(0)';
                                     }
-                                    const clearAllButton = document.getElementById('clearAllButton');
+                                    const clearAllButton =
+                                        document.getElementById(
+                                            'clearAllButton'
+                                        );
                                     if (clearAllButton) {
                                         clearAllButton.style.transform = '';
                                     }
@@ -48,21 +58,48 @@ const removeIngredient = (removeButton, ingredient, li) => {
                                 }
                             );
                         } else {
-                            chrome.storage.sync.get(['currentPage', 'isHidden'], function (pageData) {
-                                const toggleCheckbox = document.querySelector('#toggleHide input');
-                                const isHidden = (pageData && pageData.isHidden) || false;
-                                const itemsPerPage = (toggleCheckbox && toggleCheckbox.checked) || isHidden ? 5 : 3;
-                                const currentPage = (pageData && pageData.currentPage) || 1;
+                            chrome.storage.sync.get(
+                                ['currentPage', 'isHidden'],
+                                function (pageData) {
+                                    const toggleCheckbox =
+                                        document.querySelector(
+                                            '#toggleHide input'
+                                        );
+                                    const isHidden =
+                                        (pageData && pageData.isHidden) ||
+                                        false;
+                                    const itemsPerPage =
+                                        (toggleCheckbox &&
+                                            toggleCheckbox.checked) ||
+                                        isHidden
+                                            ? 5
+                                            : 3;
+                                    const currentPage =
+                                        (pageData && pageData.currentPage) || 1;
 
-                                const newTotalPages = Math.ceil(updatedIngredients.length / itemsPerPage);
-                                if (currentPage > newTotalPages) {
-                                    chrome.storage.sync.set({ currentPage: newTotalPages }, function () {
-                                        pagination(updatedIngredients, itemsPerPage, false);
-                                    });
-                                } else {
-                                    pagination(updatedIngredients, itemsPerPage, false);
+                                    const newTotalPages = Math.ceil(
+                                        updatedIngredients.length / itemsPerPage
+                                    );
+                                    if (currentPage > newTotalPages) {
+                                        chrome.storage.sync.set(
+                                            { currentPage: newTotalPages },
+                                            function () {
+                                                pagination(
+                                                    updatedIngredients,
+                                                    itemsPerPage,
+                                                    false
+                                                );
+                                            }
+                                        );
+                                    } else {
+                                        pagination(
+                                            updatedIngredients,
+                                            itemsPerPage,
+                                            false
+                                        );
+                                    }
                                 }
-                            });
+                            );
                         }
                     }
                 );

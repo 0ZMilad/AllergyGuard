@@ -20,7 +20,7 @@
     --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.05);
     --shadow-lg: 0 7.5px 15px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
-    
+
     --notification-background: #ffffff;
     --notification-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
     --notification-text-color: #333;

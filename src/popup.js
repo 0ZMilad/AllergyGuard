@@ -32,8 +32,8 @@ document
         if (invalidIngredients.length > 0) {
             createDialog(
                 'The following ingredients were not saved: ' +
-                invalidIngredients.join(', ') +
-                '. Maximum length is 40 characters.',
+                    invalidIngredients.join(', ') +
+                    '. Maximum length is 40 characters.',
                 { autoDismiss: 4000 }
             );
             return;
@@ -55,7 +55,11 @@ document
             const uniqueIngredients = [...new Set(existingIngredients)];
 
             chrome.storage.sync.set(
-                { badIngredients: uniqueIngredients, currentPage: 1, isHidden: false },
+                {
+                    badIngredients: uniqueIngredients,
+                    currentPage: 1,
+                    isHidden: false,
+                },
                 function () {
                     if (
                         newIngredients.length > 0 &&
@@ -100,20 +104,28 @@ searchInput.addEventListener('input', function () {
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(() => {
         const query = raw.toLowerCase();
-        chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
-            const allIngredients = data.badIngredients || [];
-            const isHidden = data.isHidden || false;
+        chrome.storage.sync.get(
+            ['badIngredients', 'isHidden'],
+            function (data) {
+                const allIngredients = data.badIngredients || [];
+                const isHidden = data.isHidden || false;
 
-            if (query === '') {
-                pagination(null, isHidden ? 5 : 3, true, false);
-            } else {
-                const filteredIngredients = allIngredients.filter((ingredient) =>
-                    ingredient.toLowerCase().includes(query)
-                );
+                if (query === '') {
+                    pagination(null, isHidden ? 5 : 3, true, false);
+                } else {
+                    const filteredIngredients = allIngredients.filter(
+                        (ingredient) => ingredient.toLowerCase().includes(query)
+                    );
 
-                pagination(filteredIngredients, isHidden ? 5 : 3, true, true);
+                    pagination(
+                        filteredIngredients,
+                        isHidden ? 5 : 3,
+                        true,
+                        true
+                    );
+                }
             }
-        });
+        );
     }, 150);
 });
 
@@ -128,23 +140,22 @@ chrome.storage.sync.get(['badIngredients', 'isHidden'], function (data) {
 });
 
 function updateUIBasedOnHiddenState(isHidden) {
-  const form = document.getElementById('allergy-form');
-  form.style.display = isHidden ? 'none' : '';
+    const form = document.getElementById('allergy-form');
+    form.style.display = isHidden ? 'none' : '';
 
-  document.body.classList.toggle('hidden-mode', isHidden);
+    document.body.classList.toggle('hidden-mode', isHidden);
 
-  const hideButton = document.getElementById('hideButton');
-  hideButton.innerHTML = isHidden ? '👁‍🗨' : '🙈';
-  hideButton.title     = isHidden ? 'Show form' : 'Hide form';
+    const hideButton = document.getElementById('hideButton');
+    hideButton.innerHTML = isHidden ? '👁‍🗨' : '🙈';
+    hideButton.title = isHidden ? 'Show form' : 'Hide form';
 }
 
-
-document.getElementById('hideButton').addEventListener('click', function() {
-    chrome.storage.sync.get('isHidden', function(data) {
+document.getElementById('hideButton').addEventListener('click', function () {
+    chrome.storage.sync.get('isHidden', function (data) {
         const currentState = data.isHidden || false;
         const newState = !currentState;
-        
-        chrome.storage.sync.set({ isHidden: newState }, function() {
+
+        chrome.storage.sync.set({ isHidden: newState }, function () {
             updateUIBasedOnHiddenState(newState);
             if (newState) {
                 pagination(null, 5);
@@ -160,10 +171,12 @@ function checkForFlaggedIngredients() {
         const clearAllButton = document.getElementById('clearAllButton');
         const hideButton = document.getElementById('hideButton');
         if (data.badIngredients && data.badIngredients.length > 0) {
-            chrome.storage.sync.get('isHidden', function(hiddenData) {
+            chrome.storage.sync.get('isHidden', function (hiddenData) {
                 const isHidden = hiddenData.isHidden || false;
                 const itemsPerPage = isHidden ? 5 : 3;
-                const totalPages = Math.ceil(data.badIngredients.length / itemsPerPage);
+                const totalPages = Math.ceil(
+                    data.badIngredients.length / itemsPerPage
+                );
                 const currentPage = data.currentPage || 1;
 
                 if (currentPage === totalPages) {
@@ -172,7 +185,7 @@ function checkForFlaggedIngredients() {
                 } else {
                     clearAllButton.style.display = 'none';
                 }
-                
+
                 hideButton.style.display = 'block';
             });
         } else {
@@ -189,8 +202,8 @@ document
         chrome.storage.sync.set(
             { badIngredients: emptyIngredients, isHidden: false },
             function () {
-                createDialog('All ingredients cleared!', { 
-                    autoDismiss: 2000 
+                createDialog('All ingredients cleared!', {
+                    autoDismiss: 2000,
                 });
 
                 displayIngredients(emptyIngredients);

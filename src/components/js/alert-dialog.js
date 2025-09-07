@@ -1,5 +1,4 @@
 function createDialog(message, options = {}) {
-
     const dialog = document.createElement('div');
     dialog.classList.add('notification-box');
 
@@ -7,15 +6,17 @@ function createDialog(message, options = {}) {
     if (existingDialog) {
         existingDialog.remove();
     }
-    
-    const isMatchMessage = message.includes('Warning: The product') && 
-                          message.includes('contains the following concerning ingredients');
 
-    const isScrapingMessage = message.includes('scraping') || 
-                             message.includes('scanning') || 
-                             message.includes('analyzing') ||
-                             options.type === 'scraping';
-    
+    const isMatchMessage =
+        message.includes('Warning: The product') &&
+        message.includes('contains the following concerning ingredients');
+
+    const isScrapingMessage =
+        message.includes('scraping') ||
+        message.includes('scanning') ||
+        message.includes('analyzing') ||
+        options.type === 'scraping';
+
     if (isMatchMessage) {
         dialog.classList.add('notification-match');
     } else if (isScrapingMessage) {
@@ -27,9 +28,16 @@ function createDialog(message, options = {}) {
     } else {
         if (isMatchMessage) {
             dialog.classList.add('notification-match');
-        } else if (message.includes('successfully') || message.includes('Added') || message.includes('cleared')) {
+        } else if (
+            message.includes('successfully') ||
+            message.includes('Added') ||
+            message.includes('cleared')
+        ) {
             dialog.classList.add('notification-success');
-        } else if (message.includes('not saved') || message.includes('Please enter')) {
+        } else if (
+            message.includes('not saved') ||
+            message.includes('Please enter')
+        ) {
             dialog.classList.add('notification-error');
         } else if (message.includes('already')) {
             dialog.classList.add('notification-warning');
@@ -57,7 +65,7 @@ function createDialog(message, options = {}) {
 
     const icon = document.createElement('span');
     icon.classList.add('notification-icon-symbol');
-    
+
     if (options.iconUrl) {
         const iconImg = document.createElement('img');
         iconImg.src = options.iconUrl;
@@ -67,10 +75,17 @@ function createDialog(message, options = {}) {
         if (isMatchMessage) {
             icon.innerHTML = '⚠️';
             icon.classList.add('icon-match');
-        } else if (message.includes('successfully') || message.includes('Added') || message.includes('cleared')) {
+        } else if (
+            message.includes('successfully') ||
+            message.includes('Added') ||
+            message.includes('cleared')
+        ) {
             icon.innerHTML = '✓';
             icon.classList.add('icon-success');
-        } else if (message.includes('not saved') || message.includes('Please enter')) {
+        } else if (
+            message.includes('not saved') ||
+            message.includes('Please enter')
+        ) {
             icon.innerHTML = '!';
             icon.classList.add('icon-error');
         } else if (message.includes('already')) {

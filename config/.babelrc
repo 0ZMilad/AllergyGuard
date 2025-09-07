@@ -1,11 +1,9 @@
 {
-  "presets": [
-    ["@babel/preset-env", { "modules": false }]
-  ],
-  "plugins": ["@babel/syntax-dynamic-import"],
-  "env": {
-    "production": {
-      "plugins": ["babel-plugin-transform-remove-console"]
+    "presets": [["@babel/preset-env", { "modules": false }]],
+    "plugins": ["@babel/syntax-dynamic-import"],
+    "env": {
+        "production": {
+            "plugins": ["babel-plugin-transform-remove-console"]
+        }
     }
-  }
 }

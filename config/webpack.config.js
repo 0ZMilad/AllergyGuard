@@ -19,8 +19,12 @@ const config = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.EXTENSION_API_KEY': JSON.stringify(process.env.EXTENSION_API_KEY),
-            'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL || 'http://localhost:3000'),
+            'process.env.EXTENSION_API_KEY': JSON.stringify(
+                process.env.EXTENSION_API_KEY
+            ),
+            'process.env.API_BASE_URL': JSON.stringify(
+                process.env.API_BASE_URL || 'http://localhost:3000'
+            ),
         }),
     ],
     module: {

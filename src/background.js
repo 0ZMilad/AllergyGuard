@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
 // Configuration injected at build time
 const API_CONFIG = {
     apiKey: process.env.EXTENSION_API_KEY,
-    baseUrl: process.env.API_BASE_URL
+    baseUrl: process.env.API_BASE_URL,
 };
 
 // Lightweight client cache and in-flight request map
@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (!API_CONFIG.apiKey) {
             sendResponse({
                 message: 'Error: Extension not properly configured.',
-                error: 'API key missing - please reinstall the extension.'
+                error: 'API key missing - please reinstall the extension.',
             });
             return;
         }
@@ -44,9 +44,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
         // Deduplicate in-flight requests
         if (inflight.has(encodedUrl)) {
-            inflight.get(encodedUrl)
-                .then((data) => sendResponse({ message: 'Parsed JSON data received from server.', data }))
-                .catch((err) => sendResponse({ message: 'Error sending URL to server.', error: err.message }));
+            inflight
+                .get(encodedUrl)
+                .then((data) =>
+                    sendResponse({
+                        message: 'Parsed JSON data received from server.',
+                        data,
+                    })
+                )
+                .catch((err) =>
+                    sendResponse({
+                        message: 'Error sending URL to server.',
+                        error: err.message,
+                    })
+                );
             return true;
         }
 
@@ -59,34 +70,49 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 'x-extension-id': chrome.runtime.id,
             },
         })
-        .then((res) => {
-            if (!res.ok) {
-                if (res.status === 401) {
-                    throw new Error('Extension authentication failed - please contact support');
-                } else if (res.status === 429) {
-                    throw new Error('Rate limit exceeded - please try again later');
+            .then((res) => {
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        throw new Error(
+                            'Extension authentication failed - please contact support'
+                        );
+                    } else if (res.status === 429) {
+                        throw new Error(
+                            'Rate limit exceeded - please try again later'
+                        );
+                    }
+                    throw new Error(
+                        'Server responded with status: ' + res.status
+                    );
                 }
-                throw new Error('Server responded with status: ' + res.status);
-            }
-            return res.json();
-        })
-        .then((data) => {
-            cache.set(encodedUrl, { data, expires: Date.now() + RESULT_TTL_MS });
-            return data;
-        })
-        .finally(() => {
-            inflight.delete(encodedUrl);
-        });
+                return res.json();
+            })
+            .then((data) => {
+                cache.set(encodedUrl, {
+                    data,
+                    expires: Date.now() + RESULT_TTL_MS,
+                });
+                return data;
+            })
+            .finally(() => {
+                inflight.delete(encodedUrl);
+            });
 
         inflight.set(encodedUrl, reqPromise);
 
         reqPromise
             .then((data) => {
-                sendResponse({ message: 'Parsed JSON data received from server.', data });
+                sendResponse({
+                    message: 'Parsed JSON data received from server.',
+                    data,
+                });
             })
             .catch((err) => {
                 console.error('Error:', err);
-                sendResponse({ message: 'Error sending URL to server.', error: err.message });
+                sendResponse({
+                    message: 'Error sending URL to server.',
+                    error: err.message,
+                });
             });
 
         return true;
