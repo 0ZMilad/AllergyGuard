@@ -55,6 +55,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': API_CONFIG.apiKey,
+                // Send extension identity to backend as a fallback when Origin is missing
+                'x-extension-id': chrome.runtime.id,
             },
         })
         .then((res) => {
