@@ -32,6 +32,9 @@ const config = {
             {
                 test: /\.(js|jsx)$/i,
                 loader: 'babel-loader',
+                options: {
+                    configFile: path.resolve(__dirname, '.babelrc')
+                }
             },
             {
                 test: /\.css$/i,

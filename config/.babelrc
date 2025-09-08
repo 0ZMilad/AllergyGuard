@@ -1,6 +1,6 @@
 {
     "presets": [["@babel/preset-env", { "modules": false }]],
-    "plugins": ["@babel/syntax-dynamic-import"],
+    "plugins": ["@babel/plugin-syntax-dynamic-import"],
     "env": {
         "production": {
             "plugins": ["babel-plugin-transform-remove-console"]
